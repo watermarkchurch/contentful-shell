@@ -8,6 +8,9 @@ logerr() {
   >&3 echo -e "${COLOR_RED}$@${COLOR_NC}"
 }
 
+load 'test_helper/bats-support/load'
+load 'test_helper/bats-assert/load'
+
 # setup() {
 # }
 
@@ -16,6 +19,6 @@ logerr() {
 
 @test "prints help" {
   run bin/contentful -h
-  [ "$status" -eq 0 ]
-  [ "${lines[0]}" =  "bin/contentful <command> [opts]" ]
+  assert_success
+  assert_output --partial "bin/contentful <command> [opts]"
 }
