@@ -36,6 +36,9 @@ execv() {
 usage() {
   echo "$0 <command> [opts]
   Commands:
+    init
+      Installs the required dependencies into your rails project
+
     migrate [dir|file]
       runs pending migration files in the given directory
         * [dir|file] (optional) - Default: db/migrate
@@ -96,7 +99,7 @@ parse_args() {
   OPTIND=1
   local s=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   case "$s" in
-    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|help|h|\?)
+    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|init|help|h|\?)
       export subcommand=$s
       OPTIND=2
       ;;
@@ -150,8 +153,6 @@ parse_args $@ && shift $(($OPTIND - 1))
 [[ -z "$subcommand" ]] && parse_args $@ && shift $(($OPTIND - 1))
 
 require_environment() {
-  [[ -z "$CONTENTFUL_SPACE_ID" ]] && logerr "Please set CONTENTFUL_SPACE_ID environment variable or use '-s' flag." && exit -1;
-  [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]] && logerr "Please set CONTENTFUL_MANAGEMENT_TOKEN environment variable or use '-a' flag." && exit -1;
   if [[ ! -f node_modules/.bin/contentful-migration ]]; then
     command -v npm >/dev/null 2>&1 || (logerr "I require 'npm' but it's not installed.  Please install nodejs."; exit -1)
     execv npm install
@@ -160,6 +161,24 @@ require_environment() {
 
   export JQ='jq'
   command -v jq >/dev/null 2>&1 || export JQ="$DIR/vendor/jq-1.5-linux64"
+
+  CONTENTFUL_CLI=`pwd`'/node_modules/.bin/contentful'
+  if [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]]; then
+    if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep cmaToken)" ]]; then
+      $CONTENTFUL_CLI login
+    fi
+    CONTENTFUL_MANAGEMENT_TOKEN="$(cat ~/.contentfulrc.json | jq -r '.cmaToken')"
+  fi
+  [[ ! -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]] || (logerr "No management token set!" && exit -1)
+
+  if [[ -z "$CONTENTFUL_SPACE_ID" ]]; then
+    if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep activeSpaceId)" ]]; then
+      $CONTENTFUL_CLI space use
+    fi
+    CONTENTFUL_SPACE_ID="$(cat ~/.contentfulrc.json | jq -r '.activeSpaceId')"
+  fi
+  [[ -z "$CONTENTFUL_SPACE_ID" ]] && logerr "Please set CONTENTFUL_SPACE_ID environment variable or use '-s' flag." && exit -1;
+  [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]] && logerr "Please set CONTENTFUL_MANAGEMENT_TOKEN environment variable or use '-a' flag." && exit -1;
 }
 
 ## *** Utility functions ***
@@ -243,7 +262,22 @@ export_schema() {
   rm db/contentful-schema.tmp.json
 }
 
+brew_install() {
+  command -v brew >/dev/null 2>&1 || (logerr "Please install '${1}' on your system" && return 1)
+  ([[-z "$NO_HOMEBREW"]] && brew install jq)
+}
+
 # *** Commands ***
+
+init() {
+  command -v jq >/dev/null 2>&1 || brew_install jq
+  command -v npm >/dev/null 2>&1 || brew_install node
+  [[ ! -f package.json ]] && npm init
+  [[ ! -f node_modules/.bin/contentful-migration ]] && npm install --save-dev github:watermarkchurch/migration-cli
+  [[ ! -f node_modules/.bin/ts-node ]] && npm install --save-dev typescript ts-node
+  [[ ! -f node_modules/.bin/contentful ]] && npm install --save-dev contentful-cli
+  [[ ! -f ~/.contentfulrc.json ]] && node_modules/.bin/contentful login
+}
 
 # Example: bin/contentful migrate -y -s 1xab -a $MY_TOKEN db/migrate/20180101120000_add_content_type_dog.ts
 # equivalent to: bin/rake db:migrate
@@ -565,6 +599,9 @@ case $subcommand in
   checkout)
     require_environment
     checkout $@
+    ;;
+  init)
+    init $@
     ;;
   help|h|\?)
     usage
