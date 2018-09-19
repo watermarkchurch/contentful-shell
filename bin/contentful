@@ -1,0 +1,577 @@
+#!/bin/bash
+
+COLOR_NC='\033[0m' # No Color
+COLOR_GRAY='\033[1;30m'
+COLOR_RED='\033[0;31m'
+COLOR_LCYAN='\033[1;36m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_LGREEN='\033[1;32m'
+
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+logv() {
+  [[ -z "$VERBOSE" ]] && return 0;
+
+  local msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
+  local msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
+  >&2 echo -e "${COLOR_GRAY}$msg${COLOR_NC}" || true
+}
+
+logerr() {
+  >&2 echo -e "${COLOR_RED}$@${COLOR_NC}"
+}
+
+curlv() {
+  logv "curl" $@
+  curl "$@"
+}
+
+execv() {
+  logv "$@"
+  "$@"
+}
+
+## *** Argument Parsing & validation ***
+
+usage() {
+  echo "$0 <command> [opts]
+  Commands:
+    migrate [dir|file]
+      runs pending migration files in the given directory
+        * [dir|file] (optional) - Default: db/migrate
+
+    compare [env]
+      Downloads content types and editor interfaces from the given environment
+      and compares the structure to the one stored in db/contentful-schema.json.
+      If they are different, exits -1 and prints the diff.
+
+    backup [file]
+      downloads a backup of the current space to the given file
+        * [file] (optional) - default: timestamped file in current directory
+
+    extract <id> [depth] [file]
+      downloads the specified entry and all entries & assets that it links to 
+      down to the specified depth.  The result is a file that can be passed to
+      Contentful Import.
+      If the file specified is '-', each entry is printed as a stream to STDOUT.
+      This makes it easy to pipe to jq.
+        * <id> (required) - The ID of the entry to extract
+        * [depth] (optional) - Default: 10
+
+    delete
+      Creates a backup and then deletes an environment.
+    
+    wipe
+      Deletes all data in an environment.  You should have a clean environment
+      with no entries or content types after this operation.
+
+    restore [file]
+      restores a given backup file into the current space
+        * [file] (optional) - default: the most recent backup file in the current directory
+
+    new_env
+      deletes the current working environment if it exists and makes a new clone of 'master'.
+        * -e [to environment ID] (optional) - the current working environment.  Default: \$USER
+
+    generate [name]
+      Creates a sample migration in the db/migrate directory
+        * [name] (optional) - default: 'contentful_migration'
+
+    env
+      Displays your current configured environment
+
+    checkout [env]
+      Sets your current working environment if it exists. If it does not, will ask if you'd like to create from 'master.'
+        * [env] (optional) - default: \$CONTENTFUL_ENVIRONMENT
+        * -e [to environment ID] (optional) - the current working environment.
+
+  Flags:" && \
+    grep " .)\ #" $0
+  echo "
+  Examples:" && \
+    grep -i "#\ example:" $0 | awk '{$1=""; $2=""; print "  "$0}'
+}
+
+parse_args() {
+  OPTIND=1
+  local s=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  case "$s" in
+    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|help|h|\?)
+      export subcommand=$s
+      OPTIND=2
+      ;;
+  esac
+
+  # Parse flags
+  while getopts ":hyvs:e:a:o:p:t:" arg; do
+    case $arg in
+      y) # Yes - skip prompts
+        export YES="-y"
+        ;;
+      s) # Contentful Space ID - overrides env var CONTENTFUL_SPACE_ID
+        export CONTENTFUL_SPACE_ID=$OPTARG
+        ;;
+      a) # Contentful Mgmt Token - overrides env var CONTENTFUL_MANAGEMENT_TOKEN
+        export CONTENTFUL_MANAGEMENT_TOKEN=$OPTARG
+        ;;
+      t) # Contentful access Token - overrides env var CONTENTFUL_ACCESS_TOKEN
+        export CONTENTFUL_ACCESS_TOKEN=$OPTARG
+        ;;
+      e) # Contentful environment ID - overrides env var CONTENTFUL_ENVIRONMENT
+        export CONTENTFUL_ENVIRONMENT=$OPTARG
+        ;;
+      o) # Output file - a filename to write output to
+        export FILE=$OPTARG
+        ;;
+      p) # Preview mode - hit the contentful preview API instead of the CDN
+        export CDN="https://preview.contentful.com"
+        export CONTENTFUL_ACCESS_TOKEN=$OPTARG
+        ;;
+      v) # Verbose mode - extra output
+        export VERBOSE=true
+        ;;
+      h) # Display help.
+        usage
+        exit 0
+        ;;
+      *)
+        logerr "Unknown option: '$OPTARG'"
+        usage
+        exit -1
+        ;;
+    esac
+  done
+
+  export OPTIND
+}
+
+parse_args $@ && shift $(($OPTIND - 1))
+  # If they put args before the command like 'bin/contentful -s 1xab migrate -y', try parsing again
+[[ -z "$subcommand" ]] && parse_args $@ && shift $(($OPTIND - 1))
+
+require_environment() {
+  [[ -z "$CONTENTFUL_SPACE_ID" ]] && logerr "Please set CONTENTFUL_SPACE_ID environment variable or use '-s' flag." && exit -1;
+  [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]] && logerr "Please set CONTENTFUL_MANAGEMENT_TOKEN environment variable or use '-a' flag." && exit -1;
+  if [[ ! -f node_modules/.bin/contentful-migration ]]; then
+    command -v npm >/dev/null 2>&1 || (logerr "I require 'npm' but it's not installed.  Please install nodejs."; exit -1)
+    execv npm install
+    [[ -f node_modules/.bin/contentful-migration ]] || (logerr "Failed installing node modules - please ensure contentful CLI is installed"; exit -1)
+  fi
+
+  export JQ='jq'
+  command -v jq >/dev/null 2>&1 || export JQ="$DIR/vendor/jq-1.5-linux64"
+}
+
+## *** Utility functions ***
+
+confirm() {
+  [[ -z "$2" ]] && [[ ! -z "$YES" ]] && logv "$1 (y/n): confirmed by -y flag" && return 0;
+
+  while true; do
+    if [[ -z "$2" ]]; then
+      read -p $'\033[1;36m'"$1"' (y/n): '$'\033[0m' yn
+    else
+      # double confirm - extra dangerous.
+      read -p $'\033[0;31m'"$1"' (y/n): '$'\033[0m' yn
+    fi
+    case $yn in
+        [Yy]* ) return 0;;
+        [Nn]* ) return 1;;
+        * ) echo "Please answer yes or no.";;
+    esac
+  done
+}
+
+get_environments() {
+  curlv -s https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments?access_token=$CONTENTFUL_MANAGEMENT_TOKEN | $JQ -r '.items[] .name'
+}
+
+get_space_name() {
+  curlv -s https://api.contentful.com/spaces/$1?access_token=$CONTENTFUL_MANAGEMENT_TOKEN | $JQ -r .name | tr '[:upper:]' '[:lower:]'
+}
+
+cdn_curl() {
+  local path=${@: -1};
+  if [[ ! -z "$path" ]]; then set -- "${@:1:${#}-1}"; fi
+  [[ -z "$CDN" ]] && CDN="https://cdn.contentful.com"
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && path="/environments/$CONTENTFUL_ENVIRONMENT$path"
+  curlv -s -H "Authorization: Bearer $CONTENTFUL_ACCESS_TOKEN" "$CDN/spaces/$CONTENTFUL_SPACE_ID$path"
+}
+
+mgmt_curl() {
+  local path=${@: -1}; 
+  if [[ ! -z "$path" ]]; then set -- "${@:1:${#}-1}"; fi
+
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && path="/environments/$CONTENTFUL_ENVIRONMENT$path"
+  curlv -s -H 'Content-Type: application/vnd.contentful.management.v1+json' \
+    -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_TOKEN" $@ \
+    https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID$path
+}
+
+# Man I wish I understood sed... https://stackoverflow.com/a/29060802
+# $1 File
+# $2 Find
+# $3 Replace / Append
+replace_append() {
+  if grep -q "^$2" "$1"
+  then
+      sed -i.bak "s/^$2.*$/$3/" "$1"
+      rm "$1.bak"
+  else
+      echo "" >> "$1"
+      echo "$3" >> "$1"
+  fi
+}
+
+export_schema() {
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
+
+  execv node_modules/.bin/contentful-export --export-dir db --content-file contentful-schema.tmp.json \
+    --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
+    --skip-content
+
+    # Prune stuff in 'sys' that is not important for representing the schema.
+    # Also sort by ID so it's easier to compare.
+  execv $JQ '[(.contentTypes[], .editorInterfaces[], .locales[]) | .sys = { id: .sys.id, type: .sys.type, contentType: .sys.contentType }] |
+      group_by(.sys.type) |
+      {
+        contentTypes: .[0] | sort_by(.sys.id),
+        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id),
+        locales: .[2] | sort_by(.sys.id) 
+      }' \
+    db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
+  rm db/contentful-schema.tmp.json
+}
+
+# *** Commands ***
+
+# Example: bin/contentful migrate -y -s 1xab -a $MY_TOKEN db/migrate/20180101120000_add_content_type_dog.ts
+# equivalent to: bin/rake db:migrate
+migrate() {
+  ARG="$1"
+  [[ -z "$ARG" ]] && ARG="db/migrate"
+  [[ -d "$ARG" ]] && ARG="batch $ARG"
+
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
+
+  execv node_modules/.bin/ts-node --skip-project node_modules/.bin/contentful-migration \
+    -s $CONTENTFUL_SPACE_ID $ENV -a $CONTENTFUL_MANAGEMENT_TOKEN \
+    $YES -p $ARG
+
+  compare || true
+  mv db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json db/contentful-schema.json
+}
+
+compare() {
+  name=$(get_space_name $CONTENTFUL_SPACE_ID)
+
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
+
+  mkdir -p db
+  export_schema db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json
+
+  execv diff -w db/contentful-schema.json db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json
+  if [ $? -ne 0 ]; then
+    logerr "Schema in $name/${CONTENTFUL_ENVIRONMENT:-master} differs from stored schema!"
+    return -1
+  fi
+  echo "Schema in $name/${CONTENTFUL_ENVIRONMENT:-master} is equivalent to stored schema."
+}
+
+# Example: bin/contentful backup -s 1xab -a $MY_TOKEN 2018_01_01.1xab.dump.json
+# equivalent to: bin/rake db:dump[2018_01_01.dump]
+backup() {
+  if [[ -z "$FILE" ]]; then
+    FILE="$1"
+    [[ ! -z "$FILE" ]] && FILE="--content-file $FILE" && shift
+  fi
+
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id=$CONTENTFUL_ENVIRONMENT"
+
+  execv node_modules/.bin/contentful-export $FILE \
+    --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
+    $@
+}
+
+# Example: bin/contentful extract -o page-awaken.json 6174ivkv4Iy6eoguOoacC0 10
+# Example: bin/contentful import page-awaken.json --skip-content-publishing
+# Example: bin/contentful extract -p $CONTENTFUL_PREVIEW_ACCESS_TOKEN -v 6174ivkv4Iy6eoguOoacC0 - | jq -r .sys.id
+extract() {
+  ID="$1"
+  [[ -z "$ID" ]] && logerr "No ID provided" && return -1;
+  shift
+  [[ "$1" =~ ^[0-9]+$ ]] && DEPTH="&include=$1" && shift
+  if [[ -z "$FILE" ]]; then
+    FILE="$1"
+    [[ ! -z "$FILE" && "$FILE" != "-" ]] && shift
+  fi
+  [[ -z "$FILE" ]] && FILE="contentful-extract-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-$ID-`date +"%Y-%m-%dT%H-%M-%S"`.json"
+
+  set -e
+
+  mkdir -p /tmp/extract-${ID}
+  cdn_curl "/entries?sys.id=$ID&locale=*$DEPTH" | \
+      $JQ -r '{ entries: ([.items[] | select(.sys.type == "Entry")] + .includes.Entry), assets: ([.items[] | select(.sys.type == "Asset")] + .includes.Asset) }' \
+      > "/tmp/extract-$ID/cdn.json"
+
+  mgmt_curl "/entries?sys.id\[in\]=$(jq -r '[.entries[].sys.id] | join(",")' /tmp/extract-$ID/cdn.json)" > /tmp/extract-${ID}/entries.json
+  mgmt_curl "/assets?sys.id\[in\]=$(jq -r '[.assets[].sys.id] | join(",")' /tmp/extract-$ID/cdn.json)" > /tmp/extract-${ID}/assets.json
+
+  if [[ "$FILE" == "-" ]]; then
+    $JQ -r '.items[]' /tmp/extract-${ID}/entries.json /tmp/extract-${ID}/assets.json
+  else
+    $JQ -sr '{ entries: [.[] | .items[] | select(.sys.type == "Entry")], assets: [.[] | .items[] | select(.sys.type == "Asset")] }' /tmp/extract-${ID}/entries.json /tmp/extract-${ID}/assets.json \
+      > "$FILE"
+  fi
+
+  rm -rf /tmp/extract-${ID}
+}
+
+# Example: bin/contentful restore -y -s 1xab -a $MY_TOKEN 2018_01_01.1xab.dump.json
+# equivalent to: bin/rake db:restore[2018_01_01.dump]
+restore() {
+  if [[ -z "$FILE" ]]; then
+    FILE="$1"
+    [[ ! -z "$FILE" ]] && shift
+  fi
+  if [[ -z "$FILE" ]]; then
+    FILE=$(ls contentful-export-$CONTENTFUL_SPACE_ID-* | sort -r | head -n 1)
+    [[ -z "$FILE" ]] && logerr "No file given on command line" && exit -1
+  fi
+
+  name=$(get_space_name $CONTENTFUL_SPACE_ID)
+  if [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]]; then
+    ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
+    name="$name/$CONTENTFUL_ENVIRONMENT"
+  fi
+  confirm "Import $FILE into $name?" || exit -1
+
+  execv node_modules/.bin/contentful-import \
+    --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
+    --content-file $FILE \
+    $@
+}
+
+# Example: bin/contentful delete -s 1xab -a $MY_TOKEN -e env
+delete() {
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+  [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot delete the master environment" && exit -1
+
+  name=$(get_space_name $CONTENTFUL_SPACE_ID)
+  code=$(curlv -s -o /dev/null -w "%{http_code}" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT\?access_token\=$CONTENTFUL_MANAGEMENT_TOKEN)
+  [[ $code == "404" ]] && logerr "$CONTENTFUL_ENVIRONMENT does not exist in $name" && return 0;
+  
+  confirm "This will delete the '$CONTENTFUL_ENVIRONMENT' environment from $name.  Are you sure?" || exit -1
+    
+  local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
+  backup $bkup_file
+  
+  curlv --fail -XDELETE https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT\?access_token\=$CONTENTFUL_MANAGEMENT_TOKEN
+}
+
+wipe() {
+  command -v pv >/dev/null 2>&1 || (logerr "I require 'pv' but it's not installed.  Please run 'brew install pv'"; exit -1)
+
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && logerr "Please provide an environment as a command line parameter" && exit -1
+  [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot wipe the master environment" && exit -1
+
+  if [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]]; then
+    name=$(get_space_name $CONTENTFUL_SPACE_ID)
+    code=$(curlv -s -o /dev/null -w "%{http_code}" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT\?access_token\=$CONTENTFUL_MANAGEMENT_TOKEN)
+    [[ $code == "404" ]] && logerr "$CONTENTFUL_ENVIRONMENT does not exist in $name" && return 0;
+  fi
+  
+  confirm "This will wipe all data in the '$CONTENTFUL_ENVIRONMENT' environment from space $name.  Are you sure?" || exit -1
+    
+  local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
+  backup $bkup_file --include-drafts
+
+  local unpublish
+  read -r -d '' unpublish <<EOF
+  [[ ! -z "$VERBOSE" ]] && >&2 echo -e "${COLOR_GRAY}curl -XDELETE -H 'Authorization: Bearer *****' https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1/published${COLOR_NC}";
+  curl -XDELETE -s -o /dev/null -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_TOKEN" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1/published
+  [[ ! -z "$VERBOSE" ]] && >&2 echo -e "${COLOR_GRAY}curl --fail -XDELETE -H 'Authorization: Bearer *****' https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1${COLOR_NC}";
+  curl --fail -s -o /dev/null -XDELETE -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_TOKEN" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1
+  [[ $? -ne 0 ]] && >&2 echo -e "${COLOR_RED}Failed deleting \$0 \$1${COLOR_NC}"
+  echo \$1
+EOF
+
+  local numEntries=$(cat $bkup_file | $JQ -r .entries[].sys.id | wc -l)
+  echo "About to delete ${numEntries} entries"
+  cat $bkup_file | $JQ -r .entries[].sys.id | \
+   xargs -I{} bash -c "$unpublish" "entries" "{}" | \
+   pv -l -s $numEntries > /dev/null
+
+  local numContentTypes=$(cat $bkup_file | $JQ -r .contentTypes[].sys.id | wc -l)
+  echo "About to delete ${numContentTypes} content types"
+  cat $bkup_file | $JQ -r .contentTypes[].sys.id | \
+   xargs -I{} bash -c "$unpublish" "content_types" "{}" | \
+   pv -l -s $numContentTypes > /dev/null
+
+  echo "wipe complete!"
+}
+
+# Example: bin/contentful new_env -e gordon_dev
+new_env() {
+  name=$(get_space_name $CONTENTFUL_SPACE_ID)
+
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+  [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot delete the master environment" && exit -1
+
+  echo -e "${COLOR_LCYAN}This will delete '$CONTENTFUL_ENVIRONMENT' and recreate it from master.${COLOR_NC}"
+  confirm "Continue?" || exit -1
+  export YES='-y' # don't keep bugging the user
+
+  delete
+
+  # make the environment
+  resp=$(curlv -s --fail -XPUT https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT \
+    -H "Authorization: Bearer ${CONTENTFUL_MANAGEMENT_TOKEN}" \
+    -H "Content-Type: application/vnd.contentful.management.v1+json" \
+    -d "{ \"name\": \"${CONTENTFUL_ENVIRONMENT}\" }")
+  
+  while [ ! $(echo "$resp" | $JQ -r .sys.status.sys.id) == "ready" ]
+  do
+    logv "waiting for environment $CONTENTFUL_ENVIRONMENT to be ready..."
+    sleep 1
+    resp=$(curlv -s https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT \
+      -H "Authorization: Bearer ${CONTENTFUL_MANAGEMENT_TOKEN}")
+  done
+  
+  logv "get the API keys and update the one matching ours to point to the new environment"
+  keys=$(curlv -s --fail https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/api_keys\?access_token\=$CONTENTFUL_MANAGEMENT_TOKEN)
+  my_key=$(echo "$keys" | $JQ -r ".items[] | select(.accessToken == \"$CONTENTFUL_ACCESS_TOKEN\")")
+  my_key_id=$(echo "$my_key" | $JQ -r ".sys.id")
+  my_key_version=$(echo "$my_key" | $JQ -r ".sys.version")
+  new_env_links=$(echo "$my_key" | $JQ ".environments + [{ \"sys\": { \"id\": \"$CONTENTFUL_ENVIRONMENT\", \"type\": \"Link\", \"linkType\": \"Environment\" } }] | { \"environments\": . }")
+  
+  curlv -s -o /dev/null --fail -XPUT https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/api_keys/$my_key_id \
+    -H "Authorization: Bearer ${CONTENTFUL_MANAGEMENT_TOKEN}" \
+    -H "Content-Type: application/vnd.contentful.management.v1+json" \
+    -H "X-Contentful-Version: ${my_key_version}" \
+    -d "${new_env_links}"
+
+  update_env_var "CONTENTFUL_ENVIRONMENT" $CONTENTFUL_ENVIRONMENT
+
+  echo "Environment ${CONTENTFUL_ENVIRONMENT} successfully created!"
+}
+
+update_env_var() {
+  if [[ -f '.envrc' ]]; then
+    execv replace_append .envrc "export $1\=" "export $1=$2"
+  else
+    for f in .env.*.local; do
+      execv replace_append $f "$1\=" "$1=$2"
+    done
+  fi
+}
+
+env() {
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+
+  echo "Environments:"
+  for _env in $( get_environments ); do
+    if [ $_env == $CONTENTFUL_ENVIRONMENT ]; then
+      echo -e "${COLOR_YELLOW} *$_env${COLOR_NC} (current)"
+    else
+      echo "  $_env"
+    fi
+  done
+}
+
+checkout() {
+  # allow -e or single arg
+  [[ ! -z "$1" ]] && CONTENTFUL_ENVIRONMENT="$1"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && usage && exit -1
+
+  if [[ $( get_environments ) =~ $CONTENTFUL_ENVIRONMENT ]]; then
+    update_env_var "CONTENTFUL_ENVIRONMENT" $CONTENTFUL_ENVIRONMENT
+  else
+    new_env
+  fi
+
+  export_schema
+}
+
+# Example: bin/contentful generate add content type dog
+# equivalent to: bin/rails generate migration add_content_type_dog
+generate() {
+  timestamp=$(date +%Y%m%d%H%M%S)
+  filename="$@"
+  [[ -z "$filename" ]] && filename="contentful_migration"
+  filename=${filename// /\_}
+  filename="db/migrate/${timestamp}_${filename}.ts"
+  cat > $filename <<- MIGRATION
+import Migration from 'contentful-migration'
+
+export = function (migration: Migration) {
+  const dog = migration.createContentType('dog', {
+    name: 'Dog'
+  })
+
+  const name = dog.createField('name')
+  name.name('Name')
+    .type('Symbol')
+    .required(true)
+}
+MIGRATION
+  echo "generated file $filename"
+}
+
+set -e
+
+case $subcommand in 
+  migrate)
+    require_environment
+    migrate $@
+    ;;
+  compare)
+    require_environment
+    compare $@
+    ;;
+  backup|export)
+    require_environment
+    backup $@
+    ;;
+  extract)
+    require_environment
+    extract $@
+    ;;
+  restore|import)
+    require_environment
+    restore $@
+    ;;
+  generate)
+    generate $@
+    ;;
+  delete)
+    require_environment
+    delete $@
+    ;;
+  wipe)
+    require_environment
+    wipe $@
+    ;;
+  new_env)
+    require_environment
+    new_env $@
+    ;;
+  env)
+    require_environment
+    env
+    ;;
+  checkout)
+    require_environment
+    checkout $@
+    ;;
+  help|h|\?)
+    usage
+    ;;
+  *)
+    logerr "Unknown command: '$1'"
+    usage
+    exit -1
+    ;;
+esac
