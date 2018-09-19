@@ -1,3 +1,3 @@
 .PHONY: test
 test:
-	bats test/*
+	bats test/*.bats
