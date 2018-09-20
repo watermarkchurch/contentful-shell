@@ -12,8 +12,9 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 logv() {
   [[ -z "$VERBOSE" ]] && return 0;
 
-  local msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
-  local msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
+  local msg=$@
+  [[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
+  [[ -z $CONTENTFUL_ACCESS_TOKEN ]] || msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
   >&2 echo -e "${COLOR_GRAY}$msg${COLOR_NC}" || true
 }
 
@@ -154,6 +155,7 @@ parse_args $@ && shift $(($OPTIND - 1))
 
 require_environment() {
   if [[ ! -f node_modules/.bin/contentful-migration ]]; then
+    logv "installing contentful-migration"
     command -v npm >/dev/null 2>&1 || (logerr "I require 'npm' but it's not installed.  Please install nodejs."; exit -1)
     execv npm install
     [[ -f node_modules/.bin/contentful-migration ]] || (logerr "Failed installing node modules - please ensure contentful CLI is installed"; exit -1)
@@ -165,7 +167,8 @@ require_environment() {
   CONTENTFUL_CLI=`pwd`'/node_modules/.bin/contentful'
   if [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep cmaToken)" ]]; then
-      $CONTENTFUL_CLI login
+      logv "logging in to contentful CLI"
+      execv $CONTENTFUL_CLI login
     fi
     CONTENTFUL_MANAGEMENT_TOKEN="$(cat ~/.contentfulrc.json | jq -r '.cmaToken')"
   fi
@@ -173,12 +176,14 @@ require_environment() {
 
   if [[ -z "$CONTENTFUL_SPACE_ID" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep activeSpaceId)" ]]; then
-      $CONTENTFUL_CLI space use
+      logv "Using Contentful CLI to set space"
+      execv $CONTENTFUL_CLI space use
     fi
     CONTENTFUL_SPACE_ID="$(cat ~/.contentfulrc.json | jq -r '.activeSpaceId')"
   fi
   [[ -z "$CONTENTFUL_SPACE_ID" ]] && logerr "Please set CONTENTFUL_SPACE_ID environment variable or use '-s' flag." && exit -1;
   [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]] && logerr "Please set CONTENTFUL_MANAGEMENT_TOKEN environment variable or use '-a' flag." && exit -1;
+  true
 }
 
 ## *** Utility functions ***
