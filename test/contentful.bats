@@ -56,5 +56,5 @@ Environments:
   staging
 EOF
 
-
+  unstub curl
 }
