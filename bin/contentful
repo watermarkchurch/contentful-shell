@@ -239,7 +239,7 @@ mgmt_curl() {
 replace_append() {
   if grep -q "^$2" "$1"
   then
-      sed -i.bak "s/^$2.*$/$3/" "$1"
+      sed -i.bak "s~^$2.*$~$3~" "$1"
       rm "$1.bak"
   else
       echo "" >> "$1"
@@ -268,8 +268,8 @@ export_schema() {
 }
 
 brew_install() {
-  command -v brew >/dev/null 2>&1 || (logerr "Please install '${1}' on your system" && return 1)
-  ([[-z "$NO_HOMEBREW"]] && brew install jq)
+  command -v brew >/dev/null 2>&1 || (logerr "Please install '$@' on your system" && return 1)
+  brew install "$@"
 }
 
 # *** Commands ***
@@ -277,11 +277,23 @@ brew_install() {
 init() {
   command -v jq >/dev/null 2>&1 || brew_install jq
   command -v npm >/dev/null 2>&1 || brew_install node
-  [[ ! -f package.json ]] && npm init
-  [[ ! -f node_modules/.bin/contentful-migration ]] && npm install --save-dev github:watermarkchurch/migration-cli
-  [[ ! -f node_modules/.bin/ts-node ]] && npm install --save-dev typescript ts-node
-  [[ ! -f node_modules/.bin/contentful ]] && npm install --save-dev contentful-cli
-  [[ ! -f ~/.contentfulrc.json ]] && node_modules/.bin/contentful login
+  [[ -f package.json ]] || npm init
+  [[ -f node_modules/.bin/contentful-migration ]] || npm install --save-dev github:watermarkchurch/migration-cli
+  [[ -f node_modules/.bin/ts-node ]] || npm install --save-dev typescript ts-node
+  [[ -f node_modules/.bin/contentful ]] || npm install --save-dev contentful-cli
+  [[ -f ~/.contentfulrc.json ]] || node_modules/.bin/contentful login
+
+  mkdir -p bin && touch bin/release
+  if grep 'contentful.* migrate' bin/release; then
+    logv "bin/release already exists"
+  else
+      cat <<- 'EOF' >> bin/release
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+$DIR/contentful migrate -y
+EOF
+  fi
+
+  replace_append Procfile 'release: bin/release' 'release: bin/release'
 }
 
 # Example: bin/contentful migrate -y -s 1xab -a $MY_TOKEN db/migrate/20180101120000_add_content_type_dog.ts
