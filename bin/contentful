@@ -13,7 +13,7 @@ logv() {
   [[ -z "$VERBOSE" ]] && return 0;
 
   local msg=$@
-  [[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
+  #[[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
   [[ -z $CONTENTFUL_ACCESS_TOKEN ]] || msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
   >&2 echo -e "${COLOR_GRAY}$msg${COLOR_NC}" || true
 }
@@ -314,7 +314,7 @@ migrate() {
 
   execv node_modules/.bin/ts-node --skip-project node_modules/.bin/contentful-migration \
     -s $CONTENTFUL_SPACE_ID $ENV -a $CONTENTFUL_MANAGEMENT_TOKEN \
-    $YES -p $ARG
+    $YES -p $ARG || return 1
 
   compare || true
   mv db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json db/contentful-schema.json
