@@ -9,11 +9,16 @@ load 'test_helper/mocks/stub'
 DIR=`pwd`
 
 setup() {
-  stub_node_deps
+  rm -rf $BATS_TMPDIR/init
+  mkdir -p $BATS_TMPDIR/init
+
+  pushd $BATS_TMPDIR/init
+  touch ~/.contentfulrc.json
 }
 
-# teardown() {
-# }
+teardown() {
+  popd
+}
 
 @test 'inits npm & node deps' {  
   stub npm \
@@ -22,50 +27,33 @@ setup() {
     'install --save-dev typescript ts-node : touch node_modules/.bin/ts-node' \
     'install --save-dev contentful-cli : touch node_modules/.bin/contentful' \
 
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   mkdir -p node_modules/.bin
 
   # act
   run $DIR/bin/contentful -v init
 
-  popd
 
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/node_modules/.bin/contentful-migration
-  assert_file_exist $BATS_TMPDIR/init/node_modules/.bin/ts-node
-  assert_file_exist $BATS_TMPDIR/init/node_modules/.bin/contentful
+  assert_file_exist node_modules/.bin/contentful-migration
+  assert_file_exist node_modules/.bin/ts-node
+  assert_file_exist node_modules/.bin/contentful
 
   unstub npm
 }
 
 @test 'inits bin/release' {
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   stub_node_deps
   # act
   run $DIR/bin/contentful -v init
 
-  popd
 
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/bin/release
-  contents=$(cat $BATS_TMPDIR/init/bin/release)
+  assert_file_exist bin/release
+  contents=$(cat bin/release)
   [[ $contents = *'contentful migrate -y'* ]]
 }
 
 @test 'updates existing bin/release' {
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   stub_node_deps
 
   mkdir -p bin
@@ -81,20 +69,13 @@ EOF
   # act
   run $DIR/bin/contentful -v init
 
-  popd
-
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/bin/release
-  contents=$(cat $BATS_TMPDIR/init/bin/release)
+  assert_file_exist bin/release
+  contents=$(cat bin/release)
   [[ $contents = *'contentful migrate -y'* ]]
 }
 
 @test 'doesnt touch a bin/release that already calls bin/contentful' {
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   stub_node_deps
 
   mkdir -p bin
@@ -112,21 +93,15 @@ EOF
   # act
   run $DIR/bin/contentful -v init
 
-  popd
 
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/bin/release
+  assert_file_exist bin/release
   
-  contents=$(cat $BATS_TMPDIR/init/bin/release)
+  contents=$(cat bin/release)
   [[ $contents != *'contentful migrate -y'* ]]
 }
 
 @test 'updates Procfile' {
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   stub_node_deps
 
   cat <<- 'EOF' > Procfile
@@ -136,21 +111,14 @@ EOF
   # act
   run $DIR/bin/contentful -v init
 
-  popd
-
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/Procfile
+  assert_file_exist Procfile
   
-  contents=$(cat $BATS_TMPDIR/init/Procfile)
+  contents=$(cat Procfile)
   [[ $contents = *'release: bin/release'* ]]
 }
 
 @test 'does not overwrite existing release command in Procfile' {
-  rm -rf $BATS_TMPDIR/init
-  mkdir -p $BATS_TMPDIR/init
-
-  pushd $BATS_TMPDIR/init
-  touch ~/.contentfulrc.json
   stub_node_deps
 
   cat <<- 'EOF' > Procfile
@@ -161,11 +129,22 @@ EOF
   # act
   run $DIR/bin/contentful -v init
 
-  popd
+  assert_success
+  assert_file_exist Procfile
+  
+  count=$(grep 'release: bin/release' Procfile | wc -l)
+  [[ ${count//[[:space:]]/} = '1' ]]
+}
+
+@test 'adds contentful-* to gitignore' {
+  stub_node_deps
+  
+  # act
+  run $DIR/bin/contentful -v init
 
   assert_success
-  assert_file_exist $BATS_TMPDIR/init/Procfile
+  assert_file_exist .gitignore
   
-  count=$(grep 'release: bin/release' $BATS_TMPDIR/init/Procfile | wc -l)
+  count=$(grep 'contentful-*' .gitignore | wc -l)
   [[ ${count//[[:space:]]/} = '1' ]]
 }

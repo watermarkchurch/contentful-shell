@@ -237,13 +237,18 @@ mgmt_curl() {
 # $2 Find
 # $3 Replace / Append
 replace_append() {
+  [[ ! -f "$1" ]] && touch "$1"
+  local replace="$3"
   if grep -q "^$2" "$1"
   then
+    if [[ ! -z "$replace" ]]; then
       sed -i.bak "s~^$2.*$~$3~" "$1"
       rm "$1.bak"
+    fi
   else
-      echo "" >> "$1"
-      echo "$3" >> "$1"
+    [[ -z "$replace" ]] && replace="$2"
+    echo "" >> "$1"
+    echo "$replace" >> "$1"
   fi
 }
 
@@ -293,7 +298,9 @@ $DIR/contentful migrate -y
 EOF
   fi
 
-  replace_append Procfile 'release: bin/release' 'release: bin/release'
+  replace_append Procfile 'release: bin/release'
+  replace_append .gitignore '.envrc'
+  replace_append .gitignore 'contentful-*'
 }
 
 # Example: bin/contentful migrate -y -s 1xab -a $MY_TOKEN db/migrate/20180101120000_add_content_type_dog.ts
