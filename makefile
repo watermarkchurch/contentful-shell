@@ -2,5 +2,9 @@
 test: test/test_helper/%/%.bash
 	bats test/*.bats
 
+.PHONY: test-watch
+test-watch: test/test_helper/%/%.bash
+	nodemon -e bats --watch bin/contentful --watch test/ --exec 'bats test/* || echo "failed"'
+
 test/test_helper/%/%.bash:
 	git submodule update --init
