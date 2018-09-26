@@ -1,0 +1,6007 @@
+{
+  "contentTypes": [
+    {
+      "sys": {
+        "id": "MenuItem",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "MenuItem",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "submenu",
+          "name": "Submenu",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "submenu"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "page",
+          "name": "Page",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "blog",
+                "event",
+                "location",
+                "page"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "order",
+          "name": "Order",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "action",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Action",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "action",
+          "name": "Action",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "colorReversed",
+          "name": "Color Reversed",
+          "type": "Boolean",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "author",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "name",
+      "name": "Author",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "displayName",
+          "name": "Display Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "blog",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Blog",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "category",
+          "name": "Category",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "Spiritual Growth"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hero",
+          "name": "Hero",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "author",
+          "name": "Author",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "date",
+          "name": "Date",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "blogDetail",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Blog Detail",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "author",
+          "name": "Author",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "author"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "pubDate",
+          "name": "Publish Date",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "tags",
+          "name": "Tags",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": []
+          }
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "featuredImage",
+          "name": "Featured Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shareIcon",
+          "name": "Share Icon",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "icon"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "postUrl",
+          "name": "Post URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "blogPost",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Blog Post",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "author",
+          "name": "Author",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkContentType": [
+                "author"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "pubDate",
+          "name": "Publish Date",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "metaDescription",
+          "name": "Meta-Description",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 160
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "tags",
+          "name": "Tags",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": []
+          }
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "featuredImage",
+          "name": "Featured Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "url",
+          "name": "URL / Slug",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "^[^/].*[^/]$",
+                "flags": null
+              },
+              "message": "The slug cannot begin or end with a slash."
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shareIcon",
+          "name": "Share Icon",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "icon"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "postUrl",
+          "name": "Legacy Post URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "conferenceSpeaker",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Conference Speaker",
+      "description": "(v2) Represents a speaker with associated bio & head shot for a conference",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "speakerImage",
+          "name": "Speaker Image",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "shortBio",
+          "name": "Short Bio",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 200
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "fullBio",
+          "name": "Full Bio",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "config",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "foreignKey",
+      "name": "Config",
+      "description": "A simple model that allows us to dynamically change simple variables across the whole application.",
+      "fields": [
+        {
+          "id": "foreignKey",
+          "name": "Foreign Key",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "in": [
+                "porch_live_global_config"
+              ],
+              "message": "We only allow the default site config for this site"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "contactUsEmail",
+          "name": "Contact Us Email",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^\\w[\\w.-]*@([\\w-]+\\.)+[\\w-]+$",
+                "flags": ""
+              },
+              "message": "Please enter a valid email. Example: info@theporch.live"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "topNavigation",
+          "name": "Top Navigation",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkContentType": [
+                "menu"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "secondaryButton",
+          "name": "Secondary Button",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "dropdownMenu",
+                "dynamicButton",
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "footerNavigation",
+          "name": "Footer Navigation",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menu"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "cssTheme",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "CSS Theme",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "colorHexCode",
+          "name": "Color Hex Code",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?\\b",
+                "flags": null
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "dropdownMenu",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Dropdown Menu",
+      "description": "(v2) A Dropdown Menu can be attached to a main menu to show additional menu items on click.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "name",
+          "name": "Menu Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "label",
+          "name": "Menu Label",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "dynamicButton",
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "items",
+          "name": "Items",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "dynamicButton",
+                  "menuButton"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "dynamicButton",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Dynamic Button",
+      "description": "(v2) A MenuButton which calculates its URL on the fly.  Several options are provided for which URL to use.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "text",
+          "name": "Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "min": 1,
+                "max": 60
+              },
+              "message": "A Menu Button should have a very short text field - ideally a single word.  Please limit the text to 60 characters."
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "icon",
+          "name": "Icon",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "materialIcon",
+          "name": "Material Icon",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^\\w+$",
+                "flags": null
+              },
+              "message": "The icon name must be one of the icons in Google's Material Design library: https://material.io/tools/icons/"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "link",
+          "name": "Link",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "Latest Message",
+                "Latest Blog Post"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "style",
+          "name": "Style",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "default",
+                "white-border"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "event",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Event",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "eventStartTime",
+          "name": "Event start time",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "eventEndTime",
+          "name": "Event end time",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hero",
+          "name": "Hero",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "excerpt",
+          "name": "Excerpt",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 500
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "sections",
+          "name": "Sections",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "section"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "eventType",
+          "name": "Event type",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "Recurring weekly",
+                "One-off",
+                "Special event"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "skipInWeeks",
+          "name": "Skip In Weeks",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "faq",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "questions",
+      "name": "FAQ",
+      "description": "",
+      "fields": [
+        {
+          "id": "questions",
+          "name": "Questions",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "answers",
+          "name": "Answers",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "flexibleEmailSignupForm",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Flexible Email Signup Form",
+      "description": "(v2) A fully-flexible form for an arbitrary number of inputs, which map to Mail Merge tags inside mailchimp.  Only use this if you know what a mail merge tag does.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "fields",
+          "name": "Fields",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "formField"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "mailchimpListId",
+          "name": "Mailchimp List ID",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "formField",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Form Field",
+      "description": "(v2) A single input field inside a form",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "id",
+          "name": "ID",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "label",
+          "name": "Label",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "inputType",
+          "name": "Input Type",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "string",
+                "text",
+                "email",
+                "date",
+                "number",
+                "time",
+                "color",
+                "file",
+                "url",
+                "hidden"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "placeholder",
+          "name": "Placeholder",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "defaultValue",
+          "name": "Default Value",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "required",
+          "name": "Required?",
+          "type": "Boolean",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "getConnected",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Get Connected",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "sections",
+          "name": "Sections",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "hotelInfo",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Hotel Info",
+      "description": "(v2) Info about a hotel in the area, plus booking link.  For use with Section: Hotels",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "price",
+          "name": "Price",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "description",
+          "name": "Description",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "soldOut",
+          "name": "Sold Out",
+          "type": "Boolean",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookingButton",
+          "name": "Booking Button",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "soldOutButton",
+          "name": "Sold Out Button",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "icon",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Icon",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "images",
+          "name": "Images",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            },
+            {
+              "assetFileSize": {
+                "max": 524288
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^(ftp|http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?$"
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "layout",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Layout",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "description",
+          "name": "Description",
+          "type": "Text",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "filename",
+          "name": "Filename",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "location",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Location",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "map",
+          "name": "Map",
+          "type": "Location",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hero",
+          "name": "Hero",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "contact",
+          "name": "Contact",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "phone",
+          "name": "Phone Number",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "^\\/([\\w#!:.?+=&%@!\\-\\/])+$"
+              },
+              "message": "The URL must be a slug with a leading slash, like '/ft-worth'"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "sections",
+          "name": "Sections",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "section"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "order",
+          "name": "Order",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "signatureCampus",
+          "name": "Signature Campus",
+          "type": "Boolean",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "menu",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Menu",
+      "description": "(v2) A Menu contains a number of Menu Buttons or other Menus, which will be rendered as drop-downs.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "name",
+          "name": "Menu Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "items",
+          "name": "Items",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "dropdownMenu",
+                  "dynamicButton",
+                  "menuButton"
+                ],
+                "message": "The items must be either buttons or drop-down menus."
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "menuButton",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Menu Button",
+      "description": "(v2) A Menu Button is a clickable button that goes on a Menu.  It has a link to a Page or a URL.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "text",
+          "name": "Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "min": 1,
+                "max": 60
+              },
+              "message": "A Menu Button should have a very short text field - ideally a single word.  Please limit the text to 60 characters."
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "icon",
+          "name": "Icon",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "materialIcon",
+          "name": "Material Icon",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^\\w+$",
+                "flags": null
+              },
+              "message": "The icon name must be one of the icons in Google's Material Design library: https://material.io/tools/icons/"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "externalLink",
+          "name": "External Link",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^([^\\s\\:]+):(\\/\\/)?(\\w+:{0,1}\\w*@)?(([^\\s\\/#]+\\.)+[^\\s\\/#]+)(:[0-9]+)?(\\/|(\\/|\\#)([\\w#!:.?+=&%@!\\-\\/]+))?$|^(\\/|(\\/|\\#)([\\w#!:.?+=&%@!\\-\\/]+))$"
+              },
+              "message": "The external link must be a URL like 'https://www.watermark.org/', a mailto url like 'mailto:info@watermark.org', or a relative URL like '#location-on-page'"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "link",
+          "name": "Page Link",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "page",
+                "page-v2"
+              ],
+              "message": "The Page Link must be a link to a Page which has a slug."
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "sectionLink",
+          "name": "Section Link",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "section-conference-speakers",
+                "section-email-signup",
+                "section-event-schedule",
+                "section-faq",
+                "section-hero",
+                "section-hotels",
+                "section-pricing",
+                "section-social-links",
+                "section-video-about"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "style",
+          "name": "Style",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "default",
+                "white-border"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "migrationHistory",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "migrationName",
+      "name": "Migration History",
+      "description": "System Type - Do Not Modify",
+      "fields": [
+        {
+          "id": "migrationName",
+          "name": "Migration Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "started",
+          "name": "Started",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "completed",
+          "name": "Completed",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "detail",
+          "name": "Detail",
+          "type": "Object",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "page",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Page",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "metaDescription",
+          "name": "Meta-Description",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 160
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hero",
+          "name": "Hero",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "sections",
+          "name": "Sections",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "section"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "video",
+          "name": "Video",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "video"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "cssTheme",
+          "name": "CSS Theme",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "page-v2",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Page V2",
+      "description": "All new pages should use this type",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "\\/(?:[\\w#!:.?+=&%@!\\-]\\/?)*$"
+              },
+              "message": "The slug must look like the path part of a URL and begin with a forward slash, example: '/my-page-slug'"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "metaDescription",
+          "name": "Meta-Description",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 160
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "header",
+          "name": "Header",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "section-hero",
+                "section-domain-object-header"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "sections",
+          "name": "Sections",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "subpages",
+          "name": "Subpages",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "page-v2"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "secondaryButton",
+          "name": "Secondary Button",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "dropdownMenu",
+                "dynamicButton",
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "floatMenu",
+          "name": "Float Menu",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "dropdownMenu"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "mobileMenu",
+          "name": "Mobile Menu",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "dropdownMenu"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "preroll",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "url",
+      "name": "Preroll",
+      "description": "",
+      "fields": [
+        {
+          "id": "url",
+          "name": "url",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "order",
+          "name": "order",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "priceOption",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Price Option",
+      "description": "(v2) An option for a price to be displayed by the Pricing Section",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "price",
+          "name": "Price Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "priceArt",
+          "name": "Price Art",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "availableStarting",
+          "name": "Available Starting",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "availableUntil",
+          "name": "Available Until",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "registerButton",
+          "name": "Register Button",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "recurringEvent",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Recurring Event",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "schedule",
+          "name": "Schedule",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "nextOccurrence",
+          "name": "Next Occurrence",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "timeOfDay",
+          "name": "Time Of Day",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^(0?[1-9]|1[012]):[0-5][0-9](:[0-5][0-9])?\\s*[aApP][mM]$"
+              },
+              "message": "The time of day must be something like \"7:00 AM\" or \"12:15 pm\""
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "durationInMinutes",
+          "name": "Duration In Minutes",
+          "type": "Integer",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "range": {
+                "min": 1
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "timeZone",
+          "name": "Time Zone",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "Central Time (US & Canada)",
+                "Eastern Time (US & Canada)",
+                "Mountain Time (US & Canada)",
+                "Arizona",
+                "Alaska",
+                "Hawaii",
+                "Pacific Time (US & Canada)"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "excerpt",
+          "name": "Excerpt",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "redirect",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "slug",
+      "name": "Redirect",
+      "description": "",
+      "fields": [
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "^[a-z][a-z0-9_-]*$",
+                "flags": null
+              },
+              "message": "The slug can only contain lower case letters, numbers, underscores and dashes."
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "Url",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "pageReference",
+          "name": "Page Reference",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "scheduleItem",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Schedule Item",
+      "description": "A list item that is attached to a Section: Event Schedule",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "shortDateArt",
+          "name": "Short Date Art",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "longDateAndTimeText",
+          "name": "Long Date and Time Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shortDescription",
+          "name": "Short Description",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "scheduleDetails",
+          "name": "Schedule Details",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "scriptureOfTheNight",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Scripture of the night",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "verse",
+          "name": "Verse",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "verseNumber",
+          "name": "Verse Number",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "line1",
+          "name": "Line 1",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "line2",
+          "name": "Line 2",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shareIcon",
+          "name": "Share Icon",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "icon"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Section",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "layout",
+          "name": "Layout",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkContentType": [
+                "layout"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "carousel",
+          "name": "Carousel",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "min": 2
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "testimonial"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "faq",
+          "name": "FAQ",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "faq"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bgcolor",
+          "name": "Background color",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "White",
+                "Gray",
+                "Half White & Half Gray"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "foregroundColor",
+          "name": "Foreground color",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "White",
+                "Gray",
+                "Black"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            },
+            {
+              "assetFileSize": {
+                "max": 2097152
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image",
+                "video"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "imageOverlay",
+          "name": "Image Overlay",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "icons",
+          "name": "Icons",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "icon"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "actions",
+          "name": "Actions",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "action"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "location",
+          "name": "Location",
+          "type": "Location",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "youtubeLink",
+          "name": "YoutubeLink",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "youtubeEmbed"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-conference-speakers",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Conference Speakers",
+      "description": "(v2) A section with speaker bios for a conference page",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "mobileInitialCountToShow",
+          "name": "Mobile Initial Count to Show",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "range": {
+                "min": 1
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "callToAction",
+          "name": "Call To Action",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "speakers",
+          "name": "Speakers",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "conferenceSpeaker"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-email-signup",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Email List Signup",
+      "description": "(v2) A form that users can enter their email to subscribe to a mailing list",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "form",
+          "name": "Form",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkContentType": [
+                "flexibleEmailSignupForm",
+                "simpleMailchimpForm"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "submitButtonText",
+          "name": "Submit Button Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "successMessage",
+          "name": "Success Message",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-event-schedule",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Event Schedule",
+      "description": "v2 Event Schedule section displaying events with extra info",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "scheduleItems",
+          "name": "Schedule Items",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "scheduleItem"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "footerContent",
+          "name": "Footer Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-faq",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: FAQ",
+      "description": "(v2) A section containing a number of expandable frequently asked questions",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "numberOfFaqsBeforeFold",
+          "name": "Number of Faqs Before Fold",
+          "type": "Integer",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "range": {
+                "min": 1
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "faqs",
+          "name": "FAQs",
+          "type": "Array",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "faq"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "foldButtonText",
+          "name": "Fold Button Text",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-hero",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Hero",
+      "description": "",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "subtitle",
+          "name": "Subtitle",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "foregroundImage",
+          "name": "Foreground Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-hotels",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Hotels",
+      "description": "(v2) A section with a list of Hotels for a conference attendee to look at",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "style",
+          "name": "Style",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "default",
+                "light"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hotels",
+          "name": "Hotels",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hotelInfo"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "mobileFeaturedHotels",
+          "name": "Mobile Featured Hotels",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hotelInfo"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-pricing",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Pricing",
+      "description": "(v2) A section displaying price information chosen from a set of options based on some criteria",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "individualPriceOptions",
+          "name": "Individual Price Options",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "priceOption"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "groupPriceOptions",
+          "name": "Group Price Options",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "priceOption"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-social-links",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Social Follow",
+      "description": "(v2) A short content section with social media links prompting the user to follow us on social media",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title (Contentful Only)",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "backgroundImage",
+          "name": "Background Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "socialHeader",
+          "name": "Social Header",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "socialLinks",
+          "name": "Social Links",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "icon"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "section-video-about",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Section: Video About",
+      "description": "v2 About section with youtube video",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "bookmarkTitle",
+          "name": "Bookmark Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "videoEmbed",
+          "name": "Video Embed",
+          "type": "Text",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "callToAction",
+          "name": "Call To Action",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "menuButton"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "simpleMailchimpForm",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "internalTitle",
+      "name": "Simple Mailchimp Form",
+      "description": "(v2) A Form containing only First Name, Last Name, and Email form fields.  For more complex forms use the full Mailchimp Form content type.",
+      "fields": [
+        {
+          "id": "internalTitle",
+          "name": "Internal Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": true
+        },
+        {
+          "id": "fields",
+          "name": "Fields",
+          "type": "Array",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": [
+              {
+                "in": [
+                  "Email",
+                  "First Name",
+                  "Last Name"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "mailchimpListId",
+          "name": "Mailchimp List ID",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "emailLabel",
+          "name": "Email Label",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "firstNameLabel",
+          "name": "First Name Label",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "lastNameLabel",
+          "name": "Last Name Label",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "labelStyle",
+          "name": "Label Style",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "label",
+                "placeholder"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "socialMedia",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Social Media",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "icons",
+          "name": "Icons",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "icon"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "submenu",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Submenu",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "URL",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "testimonial",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "Testimonial",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "location",
+          "name": "Location",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "icons",
+          "name": "Icons",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "youtubeEmbed",
+        "type": "ContentType",
+        "contentType": null
+      },
+      "displayField": "title",
+      "name": "YoutubeEmbed",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "video_link",
+          "name": "Video Link",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "^(https?\\:\\/\\/)?(www\\.youtube\\.com)\\/.+$",
+                "flags": null
+              },
+              "message": "Please enter a Youtube URL. Example: https://www.youtube.com/watch?v=bCMXgxtpLV8"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    }
+  ],
+  "editorInterfaces": [
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "MenuItem",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "submenu",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryCardsEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "page",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "order",
+          "widgetId": "numberEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "action",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "action",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "colorReversed",
+          "settings": {
+            "trueLabel": "Yes",
+            "falseLabel": "No"
+          },
+          "widgetId": "boolean"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "author",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "displayName",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "blog",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "category",
+          "widgetId": "radio"
+        },
+        {
+          "fieldId": "hero",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "author",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "date",
+          "widgetId": "datePicker"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "blogDetail",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "author",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "pubDate",
+          "settings": {
+            "ampm": "24",
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "tags",
+          "widgetId": "listInput"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "featuredImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "shareIcon",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "postUrl",
+          "widgetId": "urlEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "blogPost",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "author",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "pubDate",
+          "settings": {
+            "ampm": "24",
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "tags",
+          "widgetId": "listInput"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "featuredImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "shareIcon",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "postUrl",
+          "widgetId": "urlEditor"
+        },
+        {
+          "fieldId": "metaDescription",
+          "settings": {
+            "helpText": "This is what shows up on the Google search results page"
+          },
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "conferenceSpeaker",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "speakerImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "shortBio",
+          "widgetId": "multipleLine"
+        },
+        {
+          "fieldId": "fullBio",
+          "widgetId": "markdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "config",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "contactUsEmail",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "foreignKey",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "topNavigation",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "secondaryButton",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "footerNavigation",
+          "settings": {
+            "helpText": "If present, this replaces the menu in the site footer.  If left un-set, the Top Navigation is used to generate the footer."
+          },
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "cssTheme",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "colorHexCode",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "dropdownMenu",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "settings": {
+            "helpText": "If you don't set a menu label, this is the text that will appear on the button that opens the dropdown menu.  If you do set a menu label, that will control the text."
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "label",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "items",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "dynamicButton",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "text",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "icon",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "materialIcon",
+          "settings": {
+            "helpText": "As an alternative to the Media icon, you can select an icon from here: https://material.io/tools/icons/"
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "link",
+          "settings": {
+            "helpText": "Choose one of the URLs that we know how to calculate"
+          },
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "style",
+          "widgetId": "dropdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "event",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "eventStartTime",
+          "settings": {
+            "ampm": "12",
+            "format": "time"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "eventEndTime",
+          "settings": {
+            "ampm": "12",
+            "format": "time"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "hero",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "excerpt",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "sections",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "eventType",
+          "widgetId": "radio"
+        },
+        {
+          "fieldId": "skipInWeeks",
+          "widgetId": "numberEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "faq",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "questions",
+          "widgetId": "multipleLine"
+        },
+        {
+          "fieldId": "answers",
+          "widgetId": "markdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "flexibleEmailSignupForm",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "fields",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "mailchimpListId",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "formField",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "id",
+          "settings": {
+            "helpText": "The \"id\" or \"key\" which is used to identify this field in the resulting list.  Example: 'FNAME'"
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "label",
+          "settings": {
+            "helpText": "This appears next to the input field as a title for the field."
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "inputType",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "placeholder",
+          "settings": {
+            "helpText": "This appears inside the input box when the user has not entered any input yet."
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "defaultValue",
+          "settings": {
+            "helpText": "This is the value that will be submitted if the user has not entered anything."
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "required",
+          "settings": {
+            "helpText": "Set to \"yes\" to require the user to provide a value for this field.",
+            "trueLabel": "Yes",
+            "falseLabel": "No"
+          },
+          "widgetId": "boolean"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "getConnected",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "sections",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "hotelInfo",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "price",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "description",
+          "widgetId": "multipleLine"
+        },
+        {
+          "fieldId": "soldOut",
+          "settings": {
+            "helpText": "Set this to \"yes\" if the hotel has been sold out.  The booking button will be disabled.",
+            "trueLabel": "Yes",
+            "falseLabel": "No"
+          },
+          "widgetId": "boolean"
+        },
+        {
+          "fieldId": "bookingButton",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "soldOutButton",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "icon",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "images",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "layout",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "description",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "filename",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "location",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "map",
+          "widgetId": "locationEditor"
+        },
+        {
+          "fieldId": "hero",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "contact",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "phone",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "sections",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "order",
+          "widgetId": "numberEditor"
+        },
+        {
+          "fieldId": "signatureCampus",
+          "settings": {
+            "trueLabel": "Yes",
+            "falseLabel": "No"
+          },
+          "widgetId": "boolean"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "menu",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "items",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "menuButton",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "text",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "icon",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "externalLink",
+          "settings": {
+            "helpText": "Provide a URL to something on another website, a `mailto:` link to an email address, or a deep link into an app."
+          },
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "link",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "style",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "sectionLink",
+          "settings": {
+            "helpText": "If provided, this will link the user to the specific section on a page.  You must use this in combination with Page Link."
+          },
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "materialIcon",
+          "settings": {
+            "helpText": "As an alternative to the Media icon, you can select an icon from here: https://material.io/tools/icons/"
+          },
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "migrationHistory",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "migrationName",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "started",
+          "settings": {
+            "ampm": "24",
+            "format": "timeZ"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "completed",
+          "settings": {
+            "ampm": "24",
+            "format": "timeZ"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "detail",
+          "widgetId": "objectEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "page",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "hero",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "sections",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "video",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "cssTheme",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "metaDescription",
+          "settings": {
+            "helpText": "This is what shows up on the Google search results page"
+          },
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "page-v2",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "slug",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "header",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "sections",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "subpages",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "secondaryButton",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "floatMenu",
+          "settings": {
+            "helpText": "The Float Menu appears to the right side of the page and stays there as the user scrolls."
+          },
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "mobileMenu",
+          "settings": {
+            "helpText": "If this menu is provided, it replaces the Top Navigation on mobile.  It goes inside the Hamburger."
+          },
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "metaDescription",
+          "settings": {
+            "helpText": "This is what shows up on the Google search results page"
+          },
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "preroll",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "url",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "order",
+          "widgetId": "numberEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "priceOption",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "multipleLine"
+        },
+        {
+          "fieldId": "price",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "priceArt",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "availableStarting",
+          "settings": {
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "availableUntil",
+          "settings": {
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "registerButton",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "recurringEvent",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "schedule",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "nextOccurrence",
+          "settings": {
+            "ampm": "24",
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker"
+        },
+        {
+          "fieldId": "timeOfDay",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "durationInMinutes",
+          "widgetId": "numberEditor"
+        },
+        {
+          "fieldId": "timeZone",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "excerpt",
+          "widgetId": "markdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "redirect",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "slug",
+          "widgetId": "slugEditor"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "urlEditor"
+        },
+        {
+          "fieldId": "pageReference",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "scheduleItem",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "shortDateArt",
+          "settings": {
+            "helpText": "This shows up in place of the \"Short Date Text\" field if present."
+          },
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "longDateAndTimeText",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "shortDescription",
+          "widgetId": "multipleLine"
+        },
+        {
+          "fieldId": "scheduleDetails",
+          "settings": {
+            "helpText": "Use a table here to create an hourly schedule."
+          },
+          "widgetId": "markdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "scriptureOfTheNight",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "verse",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "verseNumber",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "line1",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "line2",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "shareIcon",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "layout",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "carousel",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "faq",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "bgcolor",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "foregroundColor",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "imageOverlay",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "icons",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "actions",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "location",
+          "widgetId": "locationEditor"
+        },
+        {
+          "fieldId": "youtubeLink",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-conference-speakers",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "mobileInitialCountToShow",
+          "widgetId": "numberEditor"
+        },
+        {
+          "fieldId": "callToAction",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "speakers",
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-email-signup",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "submitButtonText",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "successMessage",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "form",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-event-schedule",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "scheduleItems",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "footerContent",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-faq",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "numberOfFaqsBeforeFold",
+          "widgetId": "numberEditor"
+        },
+        {
+          "fieldId": "faqs",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "foldButtonText",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-hero",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "subtitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "foregroundImage",
+          "widgetId": "assetLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-hotels",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "style",
+          "widgetId": "dropdown"
+        },
+        {
+          "fieldId": "hotels",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "mobileFeaturedHotels",
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-pricing",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "individualPriceOptions",
+          "widgetId": "entryLinksEditor"
+        },
+        {
+          "fieldId": "groupPriceOptions",
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-social-links",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "backgroundImage",
+          "settings": {
+            "helpText": "If not provided, the background will be the default gradient."
+          },
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "socialHeader",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "socialLinks",
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "section-video-about",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "bookmarkTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "videoEmbed",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "callToAction",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "simpleMailchimpForm",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "internalTitle",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "fields",
+          "widgetId": "checkbox"
+        },
+        {
+          "fieldId": "mailchimpListId",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "emailLabel",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "firstNameLabel",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "lastNameLabel",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "labelStyle",
+          "widgetId": "dropdown"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "socialMedia",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "icons",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "submenu",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "singleLine"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "testimonial",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "content",
+          "widgetId": "markdown"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor"
+        },
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "location",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "icons",
+          "widgetId": "entryLinkEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "contentType": {
+          "sys": {
+            "id": "youtubeEmbed",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "video_link",
+          "widgetId": "urlEditor"
+        }
+      ]
+    }
+  ],
+  "locales": [
+    {
+      "name": "U.S. English",
+      "code": "en-US",
+      "fallbackCode": null,
+      "default": true,
+      "contentManagementApi": true,
+      "contentDeliveryApi": true,
+      "optional": false,
+      "sys": {
+        "id": "3CQynzwRbyBGB3AKLfsnDE",
+        "type": "Locale",
+        "contentType": null
+      }
+    }
+  ]
+}
