@@ -1,0 +1,6 @@
+#!/bin/bash
+
+>&3 echo "Stubbed curl! '$@'"
+
+# intentionally re-split args b/c bats-mock splits on strings
+stubbed-curl $@

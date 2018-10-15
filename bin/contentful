@@ -13,7 +13,7 @@ logv() {
   [[ -z "$VERBOSE" ]] && return 0;
 
   local msg=$@
-  #[[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
+  [[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
   [[ -z $CONTENTFUL_ACCESS_TOKEN ]] || msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
   >&2 echo -e "${COLOR_GRAY}$msg${COLOR_NC}" || true
 }
@@ -23,7 +23,7 @@ logerr() {
 }
 
 curlv() {
-  logv "curl" $@
+  logv "curl" "$@"
   curl "$@"
 }
 
@@ -219,7 +219,9 @@ cdn_curl() {
   if [[ ! -z "$path" ]]; then set -- "${@:1:${#}-1}"; fi
   [[ -z "$CDN" ]] && CDN="https://cdn.contentful.com"
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && path="/environments/$CONTENTFUL_ENVIRONMENT$path"
-  curlv -s -H "Authorization: Bearer $CONTENTFUL_ACCESS_TOKEN" "$CDN/spaces/$CONTENTFUL_SPACE_ID$path"
+  
+  curlv -s -H "Authorization: Bearer $CONTENTFUL_ACCESS_TOKEN" $@ \
+    "$CDN/spaces/$CONTENTFUL_SPACE_ID$path"
 }
 
 mgmt_curl() {
@@ -366,9 +368,10 @@ extract() {
   [[ -z "$FILE" ]] && FILE="contentful-extract-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-$ID-`date +"%Y-%m-%dT%H-%M-%S"`.json"
 
   set -e
+  set -o pipefail
 
   mkdir -p /tmp/extract-${ID}
-  cdn_curl "/entries?sys.id=$ID&locale=*$DEPTH" | \
+  cdn_curl --fail "/entries?sys.id=$ID&locale=*$DEPTH" | \
       $JQ -r '{ entries: ([.items[] | select(.sys.type == "Entry")] + .includes.Entry), assets: ([.items[] | select(.sys.type == "Asset")] + .includes.Asset) }' \
       > "/tmp/extract-$ID/cdn.json"
 
