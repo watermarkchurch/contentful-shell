@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION=0.1.0
+
 COLOR_NC='\033[0m' # No Color
 COLOR_GRAY='\033[1;30m'
 COLOR_RED='\033[0;31m'
@@ -43,6 +45,7 @@ execv() {
 
 usage() {
   echo "$0 <command> [opts]
+  Version $VERSION
   Commands:
     init
       Installs the required dependencies into your rails project
@@ -107,7 +110,7 @@ parse_args() {
   OPTIND=1
   local s=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   case "$s" in
-    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|init|help|h|\?)
+    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|init|version|v|help|h|\?)
       export subcommand=$s
       OPTIND=2
       ;;
@@ -639,6 +642,9 @@ case $subcommand in
     ;;
   help|h|\?)
     usage
+    ;;
+  version|v)
+    echo "$VERSION"
     ;;
   *)
     logerr "Unknown command: '$1'"
