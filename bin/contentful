@@ -291,11 +291,11 @@ brew_install() {
 init() {
   command -v jq >/dev/null 2>&1 || brew_install jq
   command -v npm >/dev/null 2>&1 || brew_install node
-  [[ -f package.json ]] || npm init
+  [[ -f package.json ]] || npm init $YES
   [[ -f node_modules/.bin/contentful-migration ]] || npm install --save-dev github:watermarkchurch/contentful-migration
   [[ -f node_modules/.bin/ts-node ]] || npm install --save-dev typescript ts-node
   [[ -f node_modules/.bin/contentful ]] || npm install --save-dev contentful-cli
-  [[ -f ~/.contentfulrc.json ]] || node_modules/.bin/contentful login
+  [[ -f ~/.contentfulrc.json ]] || [[ ! -z "$YES" ]] || node_modules/.bin/contentful login
 
   mkdir -p bin && touch bin/release
   if grep 'contentful.* migrate' bin/release; then

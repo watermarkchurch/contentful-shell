@@ -23,7 +23,7 @@ teardown() {
 @test 'inits npm & node deps' {  
   stub npm \
     'init : touch package.json' \
-    'install --save-dev github:watermarkchurch/migration-cli : touch node_modules/.bin/contentful-migration' \
+    'install --save-dev github:watermarkchurch/contentful-migration : touch node_modules/.bin/contentful-migration' \
     'install --save-dev typescript ts-node : touch node_modules/.bin/ts-node' \
     'install --save-dev contentful-cli : touch node_modules/.bin/contentful' \
 
@@ -31,7 +31,6 @@ teardown() {
 
   # act
   run $DIR/bin/contentful -v init
-
 
   assert_success
   assert_file_exist node_modules/.bin/contentful-migration
