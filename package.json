@@ -1,6 +1,6 @@
 {
   "name": "contentful-shell",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A shell utility wrapper around various Contentful utilities, providing integration with a Rails workflow",
   "dependencies": {
     "contentful-cli": "^0.16",
