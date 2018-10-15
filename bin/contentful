@@ -1,6 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 VERSION=0.2.1
+
+case "$(uname -s)" in
+  Darwin)
+    OSX=true
+    ;;
+  Linux)
+    LINUX=true
+    ;;
+  CYGWIN*|MINGW32*|MSYS*)
+    WINDOWS=true
+    ;;
+esac
 
 COLOR_NC='\033[0m' # No Color
 COLOR_GRAY='\033[1;30m'
@@ -172,7 +184,7 @@ require_environment() {
   fi
 
   export JQ='jq'
-  command -v jq >/dev/null 2>&1 || export JQ="$DIR/vendor/jq-1.5-linux64"
+  command -v jq >/dev/null 2>&1 || [[ -z "$LINUX" ]] || export JQ="$DIR/vendor/jq-1.5-linux64"
 
   CONTENTFUL_CLI=`pwd`'/node_modules/.bin/contentful'
   if [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]]; then
@@ -292,7 +304,7 @@ brew_install() {
 # *** Commands ***
 
 init() {
-  command -v jq >/dev/null 2>&1 || brew_install jq
+  [[ -z "$LINUX" ]] && (command -v jq >/dev/null 2>&1 || brew_install jq) # we bundle jq for linux
   command -v npm >/dev/null 2>&1 || brew_install node
   [[ -f package.json ]] || npm init $YES
   [[ -f node_modules/.bin/contentful-migration ]] || npm install --save-dev github:watermarkchurch/contentful-migration
