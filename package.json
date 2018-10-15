@@ -6,7 +6,12 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "contentful-cli": "^0.16",
+    "contentful-migration": "github:watermarkchurch/contentful-migration",
+    "ts-node": "^7.0",
+    "typescript": ">=2.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "make test",
