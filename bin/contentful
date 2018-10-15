@@ -313,7 +313,7 @@ init() {
   [[ -f ~/.contentfulrc.json ]] || [[ ! -z "$YES" ]] || node_modules/.bin/contentful login
 
   mkdir -p bin && touch bin/release
-  if grep 'contentful.* migrate' bin/release; then
+  if grep 'contentful.* migrate' bin/release > /dev/null; then
     logv "bin/release already exists"
   else
       cat <<- 'EOF' >> bin/release
