@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir -p "$INIT_CWD/bin"
+filename="$INIT_CWD/bin/contentful"
+
+[[ -f "$filename" ]] || ln -s ../node_modules/.bin/contentful-shell "$filename"

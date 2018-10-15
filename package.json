@@ -1,0 +1,31 @@
+{
+  "name": "contentful-shell",
+  "version": "0.1.0",
+  "description": "A shell utility wrapper around various Contentful utilities, providing integration with a Rails workflo",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "make test",
+    "install": "./postinstall"
+  },
+  "bin": "bin/contentful",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/watermarkchurch/contentful-shell.git"
+  },
+  "keywords": [
+    "bash",
+    "contentful",
+    "rails"
+  ],
+  "author": "Watermark Church <dev@watermark.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/watermarkchurch/contentful-shell/issues"
+  },
+  "homepage": "https://github.com/watermarkchurch/contentful-shell#readme"
+}
