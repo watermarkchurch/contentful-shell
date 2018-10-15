@@ -1,5 +1,7 @@
 # Contentful Shell
 
+[![npm version](https://badge.fury.io/js/contentful-shell.svg)](https://badge.fury.io/js/contentful-shell)
+
 Contentful Shell is a shell script wrapper for managing a Contentful space in your
 rails project.  It's primary purpose is to set appropriate command line flags when
 calling into the [Contentful CLI](https://github.com/contentful/contentful-cli),
