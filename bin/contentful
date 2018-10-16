@@ -528,7 +528,7 @@ new_env() {
   my_key=$(echo "$keys" | $JQ -r ".items[] | select(.accessToken == \"$CONTENTFUL_ACCESS_TOKEN\")")
   my_key_id=$(echo "$my_key" | $JQ -r ".sys.id")
   my_key_version=$(echo "$my_key" | $JQ -r ".sys.version")
-  new_env_links=$(echo "$my_key" | $JQ ".environments + [{ \"sys\": { \"id\": \"$CONTENTFUL_ENVIRONMENT\", \"type\": \"Link\", \"linkType\": \"Environment\" } }] | { \"environments\": . }")
+  new_env_links=$(echo "$my_key" | $JQ -c ".environments + [{ \"sys\": { \"id\": \"$CONTENTFUL_ENVIRONMENT\", \"type\": \"Link\", \"linkType\": \"Environment\" } }] | { \"environments\": . }")
   
   curlv -s -o /dev/null --fail -XPUT https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/api_keys/$my_key_id \
     -H "Authorization: Bearer ${CONTENTFUL_MANAGEMENT_TOKEN}" \

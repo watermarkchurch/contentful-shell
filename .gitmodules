@@ -6,7 +6,7 @@
 	url = https://github.com/ztombol/bats-assert.git
 [submodule "test/test_helper/mocks"]
 	path = test/test_helper/mocks
-	url = https://github.com/jasonkarns/bats-mock
+	url = https://github.com/gburgett/bats-mock
 [submodule "test/test_helper/bats-file"]
 	path = test/test_helper/bats-file
 	url = https://github.com/ztombol/bats-file.git
