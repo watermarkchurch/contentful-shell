@@ -16,6 +16,7 @@ export CONTENTFUL_MANAGEMENT_TOKEN=mgmttoken
 export CONTENTFUL_ACCESS_TOKEN=testtoken
 
 setup() {
+  [[ ! -f "$BATS_MOCK_TMPDIR" ]] || rm -rf "$BATS_MOCK_TMPDIR"
   rm -rf $BATS_TMPDIR/init
   mkdir -p $BATS_TMPDIR/init
 

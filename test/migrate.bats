@@ -11,6 +11,7 @@ DIR="$ROOT/test"
 FIXTURES="$DIR/fixtures"
 
 setup() {
+  [[ ! -f "$BATS_MOCK_TMPDIR" ]] || rm -rf "$BATS_MOCK_TMPDIR"
   rm -rf $BATS_TMPDIR/init
   mkdir -p $BATS_TMPDIR/init
 
