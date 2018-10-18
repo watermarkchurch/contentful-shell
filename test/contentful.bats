@@ -6,6 +6,7 @@ load 'test_helper/bats-assert/load'
 load 'test_helper/mocks/stub'
 
 setup() {
+  [[ ! -f "$BATS_MOCK_TMPDIR" ]] || rm -rf "$BATS_MOCK_TMPDIR"
   stub_node_deps
 }
 

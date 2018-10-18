@@ -30,6 +30,10 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
 
+logw() {
+  >&2 echo -e "${COLOR_YELLOW}$@${COLOR_NC}" || true
+}
+
 logv() {
   [[ -z "$VERBOSE" ]] && return 0;
 
@@ -216,15 +220,20 @@ confirm() {
   while true; do
     if [[ -z "$2" ]]; then
       read -p $'\033[1;36m'"$1"' (y/n): '$'\033[0m' yn
+      case $yn in
+          [Yy]* ) return 0;;
+          [Nn]* ) return 1;;
+          * ) echo "Please answer yes or no.";;
+      esac
     else
       # double confirm - extra dangerous.
-      read -p $'\033[0;31m'"$1"' (y/n): '$'\033[0m' yn
+      read -p $'\033[0;31m'"$1"' (type '"\"$2\""'): '$'\033[0m' yn
+      case $yn in
+          "$2" ) return 0;;
+          [Nn]* ) return 1;;
+          * ) echo "Please answer \"$2\" or no.";;
+      esac
     fi
-    case $yn in
-        [Yy]* ) return 0;;
-        [Nn]* ) return 1;;
-        * ) echo "Please answer yes or no.";;
-    esac
   done
 }
 
@@ -380,7 +389,7 @@ backup() {
 # Example: bin/contentful extract -p $CONTENTFUL_PREVIEW_ACCESS_TOKEN -v 6174ivkv4Iy6eoguOoacC0 - | jq -r .sys.id
 extract() {
   ID="$1"
-  [[ -z "$ID" ]] && logerr "No ID provided" && return -1;
+  [[ -z "$ID" ]] && logerr "No ID provided" && return -1;  
   shift
   [[ "$1" =~ ^[0-9]+$ ]] && DEPTH="&include=$1" && shift
   if [[ -z "$FILE" ]]; then
@@ -457,21 +466,26 @@ wipe() {
 
   [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
   [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && logerr "Please provide an environment as a command line parameter" && exit -1
-  [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot wipe the master environment" && exit -1
 
   if [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]]; then
     name=$(get_space_name $CONTENTFUL_SPACE_ID)
     code=$(curlv -s -o /dev/null -w "%{http_code}" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT\?access_token\=$CONTENTFUL_MANAGEMENT_TOKEN)
     [[ $code == "404" ]] && logerr "$CONTENTFUL_ENVIRONMENT does not exist in $name" && return 0;
+    [[ $code != "200" ]] && logerr "Unknown error getting environment!" && return 0;
   fi
   
   confirm "This will wipe all data in the '$CONTENTFUL_ENVIRONMENT' environment from space $name.  Are you sure?" || exit -1
+  if [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]]; then
+    [[ ! -z "$YES" ]] && logerr "No you can't wipe the master environment unattended with the '-y' flag.  I need you to confirm it!" && exit -1;
+    confirm "This is the master environment!  This could break your site!  I need to hear you say \"I'm super cereal\"" "I'm super cereal"
+    logw "OK, your funeral..."
+  fi
     
   local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
   backup $bkup_file --include-drafts
 
   local unpublish
-  read -r -d '' unpublish <<EOF
+  read -r -d '' unpublish <<EOF || true
   [[ ! -z "$VERBOSE" ]] && >&2 echo -e "${COLOR_GRAY}curl -XDELETE -H 'Authorization: Bearer *****' https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1/published${COLOR_NC}";
   curl -XDELETE -s -o /dev/null -H "Authorization: Bearer $CONTENTFUL_MANAGEMENT_TOKEN" https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1/published
   [[ ! -z "$VERBOSE" ]] && >&2 echo -e "${COLOR_GRAY}curl --fail -XDELETE -H 'Authorization: Bearer *****' https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1${COLOR_NC}";
@@ -480,7 +494,7 @@ wipe() {
   echo \$1
 EOF
 
-  local numEntries=$(cat $bkup_file | $JQ -r .entries[].sys.id | wc -l)
+  local numEntries=$(cat $bkup_file | $JQ -r .entries[].sys.id | wc -l)  
   echo "About to delete ${numEntries} entries"
   cat $bkup_file | $JQ -r .entries[].sys.id | \
    xargs -I{} bash -c "$unpublish" "entries" "{}" | \
@@ -492,7 +506,7 @@ EOF
    xargs -I{} bash -c "$unpublish" "content_types" "{}" | \
    pv -l -s $numContentTypes > /dev/null
 
-  echo "wipe complete!"
+  echo "${COLOR_LGREEN}wipe complete!${COLOR_NC}"
 }
 
 # Example: bin/contentful new_env -e gordon_dev

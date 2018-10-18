@@ -1,0 +1,385 @@
+{
+  "contentTypes": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "4gyidsb2jx1u"
+          }
+        },
+        "id": "testimonial",
+        "type": "ContentType",
+        "createdAt": "2017-09-21T20:03:36.321Z",
+        "updatedAt": "2017-09-21T20:03:47.757Z",
+        "environment": {
+          "sys": {
+            "id": "gburgett",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedVersion": 1,
+        "firstPublishedAt": "2017-09-21T20:03:47.729Z",
+        "publishedAt": "2017-09-21T20:03:47.729Z"
+      },
+      "displayField": "title",
+      "name": "Testimonial",
+      "description": "",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "content",
+          "name": "Content",
+          "type": "Text",
+          "localized": false,
+          "required": true,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "location",
+          "name": "Location",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "icons",
+          "name": "Icons",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    }
+  ],
+  "editorInterfaces": [],
+  "entries": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "4gyidsb2jx1u"
+          }
+        },
+        "id": "Wa6UANVREQGqgWSc826ae",
+        "type": "Entry",
+        "createdAt": "2017-09-21T20:10:17.064Z",
+        "updatedAt": "2017-09-21T20:11:28.958Z",
+        "environment": {
+          "sys": {
+            "id": "gburgett",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedVersion": 1,
+        "firstPublishedAt": "2017-09-21T20:11:28.930Z",
+        "publishedAt": "2017-09-21T20:11:28.930Z",
+        "contentType": {
+          "sys": {
+            "type": "Link",
+            "linkType": "ContentType",
+            "id": "submenu"
+          }
+        }
+      },
+      "fields": {
+        "title": {
+          "en-US": "Our Story"
+        },
+        "url": {
+          "en-US": "/about#OurStory"
+        }
+      }
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "4gyidsb2jx1u"
+          }
+        },
+        "id": "2L71nVWkta04iSGOSgWQwW",
+        "type": "Entry",
+        "createdAt": "2017-09-21T20:10:17.067Z",
+        "updatedAt": "2017-09-21T20:19:45.495Z",
+        "environment": {
+          "sys": {
+            "id": "gburgett",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedVersion": 1,
+        "firstPublishedAt": "2017-09-21T20:19:45.403Z",
+        "publishedAt": "2017-09-21T20:19:45.403Z",
+        "contentType": {
+          "sys": {
+            "type": "Link",
+            "linkType": "ContentType",
+            "id": "submenu"
+          }
+        }
+      },
+      "fields": {
+        "title": {
+          "en-US": "Special Event"
+        },
+        "url": {
+          "en-US": "/events/passion-2017"
+        }
+      }
+    }
+  ],
+  "assets": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "4gyidsb2jx1u"
+          }
+        },
+        "id": "1xN9uDfexeWECqwKYayOGk",
+        "type": "Asset",
+        "createdAt": "2017-09-21T20:03:50.989Z",
+        "updatedAt": "2017-09-25T21:51:08.089Z",
+        "environment": {
+          "sys": {
+            "id": "gburgett",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "0JBMOYP0NlYH8uVNdqD1TK"
+          }
+        },
+        "publishedCounter": 2,
+        "version": 29,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "0JBMOYP0NlYH8uVNdqD1TK"
+          }
+        },
+        "publishedVersion": 28,
+        "firstPublishedAt": "2017-09-21T20:10:16.801Z",
+        "publishedAt": "2017-09-25T21:51:08.059Z"
+      },
+      "fields": {
+        "title": {
+          "en-US": "Ranger Game - Get Connected "
+        },
+        "file": {
+          "en-US": {
+            "url": "//images.ctfassets.net/4gyidsb2jx1u/1xN9uDfexeWECqwKYayOGk/e38fd0e37df30e64925482d713ffc101/DSC_1428.jpg",
+            "details": {
+              "size": 1877330,
+              "image": {
+                "width": 6016,
+                "height": 4016
+              }
+            },
+            "fileName": "DSC_1428.jpg",
+            "contentType": "image/jpeg"
+          }
+        }
+      }
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "4gyidsb2jx1u"
+          }
+        },
+        "id": "3ODt74cXIAS0wECy06QKwg",
+        "type": "Asset",
+        "createdAt": "2017-09-21T20:03:50.990Z",
+        "updatedAt": "2017-09-21T20:10:15.575Z",
+        "environment": {
+          "sys": {
+            "id": "gburgett",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 3,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "49x3q2YqBkpAasHXDVZbJY"
+          }
+        },
+        "publishedVersion": 2,
+        "firstPublishedAt": "2017-09-21T20:10:15.560Z",
+        "publishedAt": "2017-09-21T20:10:15.560Z"
+      },
+      "fields": {
+        "title": {
+          "en-US": "Scripture Background"
+        },
+        "file": {
+          "en-US": {
+            "url": "//images.ctfassets.net/4gyidsb2jx1u/3ODt74cXIAS0wECy06QKwg/7bca8b1ae3974a1eb365de408721aec3/glenn-carstens-peters-190592.jpg",
+            "details": {
+              "size": 570837,
+              "image": {
+                "width": 1600,
+                "height": 1064
+              }
+            },
+            "fileName": "glenn-carstens-peters-190592.jpg",
+            "contentType": "image/jpeg"
+          }
+        }
+      }
+    }
+  ],
+  "locales": []
+}
