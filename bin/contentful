@@ -295,14 +295,13 @@ export_schema() {
     # Prune stuff in 'sys' that is not important for representing the schema.
     # Also sort by ID so it's easier to compare.
   execv $JQ '[
-        (.contentTypes[], .editorInterfaces[], .locales[]) |
+        (.contentTypes[], .editorInterfaces[]) |
         .sys = ({ id: .sys.id, type: .sys.type, contentType: .sys.contentType } | with_entries(if .value == null then empty else . end))
       ] |
       group_by(.sys.type) |
       {
         contentTypes: .[0] | sort_by(.sys.id),
-        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id),
-        locales: .[2] | sort_by(.sys.id) 
+        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id)
       }' \
     db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
   rm db/contentful-schema.tmp.json

@@ -5941,20 +5941,5 @@
         }
       ]
     }
-  ],
-  "locales": [
-    {
-      "name": "U.S. English",
-      "code": "en-US",
-      "fallbackCode": null,
-      "default": true,
-      "contentManagementApi": true,
-      "contentDeliveryApi": true,
-      "optional": false,
-      "sys": {
-        "id": "3CQynzwRbyBGB3AKLfsnDE",
-        "type": "Locale"
-      }
-    }
   ]
 }
