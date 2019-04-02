@@ -3,8 +3,7 @@
     {
       "sys": {
         "id": "MenuItem",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "MenuItem",
@@ -90,8 +89,7 @@
     {
       "sys": {
         "id": "action",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Action",
@@ -149,8 +147,7 @@
     {
       "sys": {
         "id": "author",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "name",
       "name": "Author",
@@ -196,8 +193,7 @@
     {
       "sys": {
         "id": "blog",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Blog",
@@ -290,8 +286,7 @@
     {
       "sys": {
         "id": "blogDetail",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Blog Detail",
@@ -411,8 +406,7 @@
     {
       "sys": {
         "id": "blogPost",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Blog Post",
@@ -559,8 +553,7 @@
     {
       "sys": {
         "id": "conferenceSpeaker",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Conference Speaker",
@@ -634,8 +627,7 @@
     {
       "sys": {
         "id": "config",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "foreignKey",
       "name": "Config",
@@ -737,8 +729,7 @@
     {
       "sys": {
         "id": "cssTheme",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "CSS Theme",
@@ -780,8 +771,7 @@
     {
       "sys": {
         "id": "dropdownMenu",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Dropdown Menu",
@@ -852,8 +842,7 @@
     {
       "sys": {
         "id": "dynamicButton",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Dynamic Button",
@@ -961,8 +950,7 @@
     {
       "sys": {
         "id": "event",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Event",
@@ -1089,8 +1077,7 @@
     {
       "sys": {
         "id": "faq",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "questions",
       "name": "FAQ",
@@ -1121,8 +1108,7 @@
     {
       "sys": {
         "id": "flexibleEmailSignupForm",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Flexible Email Signup Form",
@@ -1174,8 +1160,7 @@
     {
       "sys": {
         "id": "formField",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Form Field",
@@ -1271,8 +1256,7 @@
     {
       "sys": {
         "id": "getConnected",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Get Connected",
@@ -1319,8 +1303,7 @@
     {
       "sys": {
         "id": "hotelInfo",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Hotel Info",
@@ -1415,8 +1398,7 @@
     {
       "sys": {
         "id": "icon",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Icon",
@@ -1475,8 +1457,7 @@
     {
       "sys": {
         "id": "layout",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Layout",
@@ -1538,8 +1519,7 @@
     {
       "sys": {
         "id": "location",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Location",
@@ -1695,8 +1675,7 @@
     {
       "sys": {
         "id": "menu",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Menu",
@@ -1751,8 +1730,7 @@
     {
       "sys": {
         "id": "menuButton",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Menu Button",
@@ -1904,8 +1882,7 @@
     {
       "sys": {
         "id": "migrationHistory",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "migrationName",
       "name": "Migration History",
@@ -1956,8 +1933,7 @@
     {
       "sys": {
         "id": "page",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Page",
@@ -2064,8 +2040,7 @@
     {
       "sys": {
         "id": "page-v2",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Page V2",
@@ -2239,8 +2214,7 @@
     {
       "sys": {
         "id": "preroll",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "url",
       "name": "Preroll",
@@ -2271,8 +2245,7 @@
     {
       "sys": {
         "id": "priceOption",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Price Option",
@@ -2377,8 +2350,7 @@
     {
       "sys": {
         "id": "recurringEvent",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Recurring Event",
@@ -2488,8 +2460,7 @@
     {
       "sys": {
         "id": "redirect",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "slug",
       "name": "Redirect",
@@ -2542,8 +2513,7 @@
     {
       "sys": {
         "id": "scheduleItem",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Schedule Item",
@@ -2611,8 +2581,7 @@
     {
       "sys": {
         "id": "scriptureOfTheNight",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Scripture of the night",
@@ -2701,8 +2670,7 @@
     {
       "sys": {
         "id": "section",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Section",
@@ -2954,8 +2922,7 @@
     {
       "sys": {
         "id": "section-conference-speakers",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Conference Speakers",
@@ -3060,8 +3027,7 @@
     {
       "sys": {
         "id": "section-email-signup",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Email List Signup",
@@ -3150,8 +3116,7 @@
     {
       "sys": {
         "id": "section-event-schedule",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Event Schedule",
@@ -3240,8 +3205,7 @@
     {
       "sys": {
         "id": "section-faq",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: FAQ",
@@ -3329,8 +3293,7 @@
     {
       "sys": {
         "id": "section-hero",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Hero",
@@ -3405,8 +3368,7 @@
     {
       "sys": {
         "id": "section-hotels",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Hotels",
@@ -3527,8 +3489,7 @@
     {
       "sys": {
         "id": "section-pricing",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Pricing",
@@ -3628,8 +3589,7 @@
     {
       "sys": {
         "id": "section-social-links",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Social Follow",
@@ -3728,8 +3688,7 @@
     {
       "sys": {
         "id": "section-video-about",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Section: Video About",
@@ -3807,8 +3766,7 @@
     {
       "sys": {
         "id": "simpleMailchimpForm",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "internalTitle",
       "name": "Simple Mailchimp Form",
@@ -3908,8 +3866,7 @@
     {
       "sys": {
         "id": "socialMedia",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Social Media",
@@ -3951,8 +3908,7 @@
     {
       "sys": {
         "id": "submenu",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Submenu",
@@ -3983,8 +3939,7 @@
     {
       "sys": {
         "id": "testimonial",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "Testimonial",
@@ -4057,8 +4012,7 @@
     {
       "sys": {
         "id": "youtubeEmbed",
-        "type": "ContentType",
-        "contentType": null
+        "type": "ContentType"
       },
       "displayField": "title",
       "name": "YoutubeEmbed",
@@ -5999,8 +5953,7 @@
       "optional": false,
       "sys": {
         "id": "3CQynzwRbyBGB3AKLfsnDE",
-        "type": "Locale",
-        "contentType": null
+        "type": "Locale"
       }
     }
   ]

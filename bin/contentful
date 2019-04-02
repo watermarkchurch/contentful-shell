@@ -294,7 +294,10 @@ export_schema() {
 
     # Prune stuff in 'sys' that is not important for representing the schema.
     # Also sort by ID so it's easier to compare.
-  execv $JQ '[(.contentTypes[], .editorInterfaces[], .locales[]) | .sys = { id: .sys.id, type: .sys.type, contentType: .sys.contentType }] |
+  execv $JQ '[
+        (.contentTypes[], .editorInterfaces[], .locales[]) |
+        .sys = ({ id: .sys.id, type: .sys.type, contentType: .sys.contentType } | with_entries(if .value == null then empty else . end))
+      ] |
       group_by(.sys.type) |
       {
         contentTypes: .[0] | sort_by(.sys.id),
