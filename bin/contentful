@@ -301,7 +301,18 @@ export_schema() {
       group_by(.sys.type) |
       {
         contentTypes: .[0] | sort_by(.sys.id),
-        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id)
+        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id) |
+          [.[] | {
+              sys: .sys,
+              controls: .controls | 
+                [.[] | {
+                    fieldId: .fieldId,
+                    settings: .settings,
+                    widgetId: .widgetId
+                  } | with_entries(if .value == null then empty else . end)
+                ] | sort_by(.fieldId)
+              }
+          ]
       }' \
     db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
   rm db/contentful-schema.tmp.json
