@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.2.2
+VERSION=0.2.4
 
 case "$(uname -s)" in
   Darwin)
@@ -294,12 +294,25 @@ export_schema() {
 
     # Prune stuff in 'sys' that is not important for representing the schema.
     # Also sort by ID so it's easier to compare.
-  execv $JQ '[(.contentTypes[], .editorInterfaces[], .locales[]) | .sys = { id: .sys.id, type: .sys.type, contentType: .sys.contentType }] |
+  execv $JQ '[
+        (.contentTypes[], .editorInterfaces[]) |
+        .sys = ({ id: .sys.id, type: .sys.type, contentType: .sys.contentType } | with_entries(if .value == null then empty else . end))
+      ] |
       group_by(.sys.type) |
       {
         contentTypes: .[0] | sort_by(.sys.id),
-        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id),
-        locales: .[2] | sort_by(.sys.id) 
+        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id) |
+          [.[] | {
+              sys: .sys,
+              controls: .controls | 
+                [.[] | {
+                    fieldId: .fieldId,
+                    settings: .settings,
+                    widgetId: .widgetId
+                  } | with_entries(if .value == null then empty else . end)
+                ] | sort_by(.fieldId)
+              }
+          ]
       }' \
     db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
   rm db/contentful-schema.tmp.json
