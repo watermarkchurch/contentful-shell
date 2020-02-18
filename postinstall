@@ -4,5 +4,3 @@ mkdir -p "$INIT_CWD/bin"
 filename="$INIT_CWD/bin/contentful"
 
 ln -f -s ../node_modules/.bin/contentful-shell "$filename"
-
-cd "$INIT_CWD" && bin/contentful init -y
