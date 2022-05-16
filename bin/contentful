@@ -123,7 +123,7 @@ usage() {
     grep " .)\ #" $0
   echo "
   Examples:" && \
-    grep -i "#\ example:" $0 | awk '{$1=""; $2=""; print "  "$0}'
+    grep -i "#\ example:" $0 | sed 's/# Example:/   /g' | tail -n+2
 }
 
 parse_args() {
@@ -221,7 +221,7 @@ require_environment() {
 confirm() {
   [[ -z "$2" ]] && [[ ! -z "$YES" ]] && logv "$1 (y/n): confirmed by -y flag" && return 0;
 
-  while true; do
+  for run in {1..2}; do
     if [[ -z "$2" ]]; then
       read -p $'\033[1;36m'"$1"' (y/n): '$'\033[0m' yn
       case $yn in
@@ -239,6 +239,9 @@ confirm() {
       esac
     fi
   done
+
+  logerr "Failed to confirm - aborting"
+  return 1;
 }
 
 get_environments() {
@@ -371,6 +374,8 @@ backup() {
 # Example: bin/contentful extract -o page-awaken.json 6174ivkv4Iy6eoguOoacC0 10
 # Example: bin/contentful import page-awaken.json --skip-content-publishing
 # Example: bin/contentful extract -p $CONTENTFUL_PREVIEW_ACCESS_TOKEN -v 6174ivkv4Iy6eoguOoacC0 - | jq -r .sys.id
+# Example: copy a page & included sections (to depth 2) from staging to master
+# Example:    bin/contentful extract -e staging 6174ivkv4Iy6eoguOoacC0 2 | bin/contentful import -e master -y
 extract() {
   ID="$1"
   [[ -z "$ID" ]] && logerr "No ID provided" && return -1;  
@@ -405,6 +410,8 @@ extract() {
     # Merge the entries and assets as a File that can be uploaded using bin/contentful import
     $JQ -sr '{ entries: [.[] | .items[] | select(.sys.type == "Entry")], assets: [.[] | .items[] | select(.sys.type == "Asset")] }' ./tmp/extract-${ID}/entries.json ./tmp/extract-${ID}/assets.json \
       > "$FILE"
+
+    echo "$FILE"
   fi
 }
 
@@ -416,9 +423,9 @@ restore() {
     [[ ! -z "$FILE" ]] && shift
   fi
   if [[ -z "$FILE" ]]; then
-    FILE=$(ls contentful-export-$CONTENTFUL_SPACE_ID-* | sort -r | head -n 1)
-    [[ -z "$FILE" ]] && logerr "No file given on command line" && exit -1
+    read -p $'\033[1;36m'"Filename:"' (y/n): '$'\033[0m' FILE
   fi
+  [[ -z "$FILE" ]] && logerr "No import file provided" && return -1;  
 
   name=$(get_space_name $CONTENTFUL_SPACE_ID)
   if [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]]; then
