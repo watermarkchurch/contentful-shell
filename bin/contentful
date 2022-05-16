@@ -288,7 +288,7 @@ replace_append() {
 export_schema() {
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
 
-  execv node_modules/.bin/contentful-export --export-dir db --content-file contentful-schema.tmp.json \
+  execv node_modules/.bin/contentful space export --export-dir db --content-file contentful-schema.tmp.json \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     --skip-content
 
@@ -392,7 +392,7 @@ backup() {
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id=$CONTENTFUL_ENVIRONMENT"
 
-  execv node_modules/.bin/contentful-export $FILE \
+  execv node_modules/.bin/contentful space export $FILE \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     $@
 }
@@ -404,7 +404,8 @@ extract() {
   ID="$1"
   [[ -z "$ID" ]] && logerr "No ID provided" && return -1;  
   shift
-  [[ "$1" =~ ^[0-9]+$ ]] && DEPTH="&include=$1" && shift
+  DEPTH="${1:-10}"
+  [[ "$1" =~ ^[0-9]+$ ]] && shift
   if [[ -z "$FILE" ]]; then
     FILE="$1"
     [[ ! -z "$FILE" && "$FILE" != "-" ]] && shift
@@ -414,22 +415,26 @@ extract() {
   set -e
   set -o pipefail
 
-  mkdir -p /tmp/extract-${ID}
-  cdn_curl --fail "/entries?sys.id=$ID&locale=*$DEPTH" | \
-      $JQ -r '{ entries: ([.items[] | select(.sys.type == "Entry")] + .includes.Entry), assets: ([.items[] | select(.sys.type == "Asset")] + .includes.Asset) }' \
-      > "/tmp/extract-$ID/cdn.json"
+  mkdir -p ./tmp/extract-${ID}
+  trap "rm -rf ./tmp/extract-${ID}" exit
 
-  mgmt_curl "/entries?sys.id\[in\]=$(jq -r '[.entries[].sys.id] | join(",")' /tmp/extract-$ID/cdn.json)" > /tmp/extract-${ID}/entries.json
-  mgmt_curl "/assets?sys.id\[in\]=$(jq -r '[.assets[].sys.id] | join(",")' /tmp/extract-$ID/cdn.json)" > /tmp/extract-${ID}/assets.json
+  # Curl the CDN to get the IDs of all entries and assets referenced by the given entry
+  cdn_curl --fail "/entries?sys.id=$ID&include=$DEPTH" | \
+      $JQ -r '{ entries: ([.items[] | select(.sys.type == "Entry")] + .includes.Entry), assets: ([.items[] | select(.sys.type == "Asset")] + .includes.Asset) }' \
+      > "./tmp/extract-$ID/cdn.json"
+
+  # Curl the management API to get all the Entry and Asset documents from those IDs
+  mgmt_curl "/entries?sys.id\[in\]=$(jq -r '[.entries[].sys.id] | join(",")' ./tmp/extract-$ID/cdn.json)" > ./tmp/extract-${ID}/entries.json
+  mgmt_curl "/assets?sys.id\[in\]=$(jq -r '[.assets[].sys.id] | join(",")' ./tmp/extract-$ID/cdn.json)" > ./tmp/extract-${ID}/assets.json
 
   if [[ "$FILE" == "-" ]]; then
-    $JQ -r '.items[]' /tmp/extract-${ID}/entries.json /tmp/extract-${ID}/assets.json
+    # Merge the entries and assets as a stream of JSON documents to stdout
+    $JQ -rc '.items[]' ./tmp/extract-${ID}/entries.json ./tmp/extract-${ID}/assets.json
   else
-    $JQ -sr '{ entries: [.[] | .items[] | select(.sys.type == "Entry")], assets: [.[] | .items[] | select(.sys.type == "Asset")] }' /tmp/extract-${ID}/entries.json /tmp/extract-${ID}/assets.json \
+    # Merge the entries and assets as a File that can be uploaded using bin/contentful import
+    $JQ -sr '{ entries: [.[] | .items[] | select(.sys.type == "Entry")], assets: [.[] | .items[] | select(.sys.type == "Asset")] }' ./tmp/extract-${ID}/entries.json ./tmp/extract-${ID}/assets.json \
       > "$FILE"
   fi
-
-  rm -rf /tmp/extract-${ID}
 }
 
 # Example: bin/contentful restore -y -s 1xab -a $MY_TOKEN 2018_01_01.1xab.dump.json
@@ -451,7 +456,7 @@ restore() {
   fi
   confirm "Import $FILE into $name?" || exit -1
 
-  execv node_modules/.bin/contentful-import \
+  execv node_modules/.bin/contentful space import \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     --content-file $FILE \
     $@
