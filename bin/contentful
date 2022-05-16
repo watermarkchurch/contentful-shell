@@ -101,7 +101,7 @@ usage() {
 
     new_env
       deletes the current working environment if it exists and makes a new clone of 'master'.
-        * -e [to environment ID] (optional) - the current working environment.  Default: \$USER
+        * -e [to environment ID] (optional) - the current working environment.  Default: dev
 
     generate [name]
       Creates a sample migration in the db/migrate directory
@@ -115,6 +115,10 @@ usage() {
         * [env] (optional) - default: \$CONTENTFUL_ENVIRONMENT
         * -e [to environment ID] (optional) - the current working environment.
 
+    download_schema
+      Updates your local contentful-schema.json file with the content-types from the space and environment.
+        * -e [to environment ID] (optional) - the current working environment.
+
   Flags:" && \
     grep " .)\ #" $0
   echo "
@@ -126,7 +130,7 @@ parse_args() {
   OPTIND=1
   local s=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   case "$s" in
-    migrate|backup|export|extract|compare|restore|new_env|checkout|import|generate|env|delete|wipe|init|version|v|help|h|\?)
+    migrate|backup|export|extract|compare|restore|new_env|checkout|download_schema|import|generate|env|delete|wipe|init|version|v|help|h|\?)
       export subcommand=$s
       OPTIND=2
       ;;
@@ -285,39 +289,6 @@ replace_append() {
   fi
 }
 
-export_schema() {
-  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
-
-  execv node_modules/.bin/contentful space export --export-dir db --content-file contentful-schema.tmp.json \
-    --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
-    --skip-content
-
-    # Prune stuff in 'sys' that is not important for representing the schema.
-    # Also sort by ID so it's easier to compare.
-  execv $JQ '[
-        (.contentTypes[], .editorInterfaces[]) |
-        .sys = ({ id: .sys.id, type: .sys.type, contentType: .sys.contentType } | with_entries(if .value == null then empty else . end))
-      ] |
-      group_by(.sys.type) |
-      {
-        contentTypes: .[0] | sort_by(.sys.id),
-        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id) |
-          [.[] | {
-              sys: .sys,
-              controls: .controls | 
-                [.[] | {
-                    fieldId: .fieldId,
-                    settings: .settings,
-                    widgetId: .widgetId
-                  } | with_entries(if .value == null then empty else . end)
-                ] | sort_by(.fieldId)
-              }
-          ]
-      }' \
-    db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
-  rm db/contentful-schema.tmp.json
-}
-
 brew_install() {
   command -v brew >/dev/null 2>&1 || (logerr "Please install '$@' on your system" && return 1)
   brew install "$@"
@@ -372,7 +343,7 @@ compare() {
   [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
 
   mkdir -p db
-  export_schema db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json
+  download_schema db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json
 
   execv diff -w db/contentful-schema.json db/contentful-schema-${CONTENTFUL_ENVIRONMENT:-master}.json
   if [ $? -ne 0 ]; then
@@ -464,7 +435,7 @@ restore() {
 
 # Example: bin/contentful delete -s 1xab -a $MY_TOKEN -e env
 delete() {
-  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="dev"
   [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot delete the master environment" && exit -1
 
   name=$(get_space_name $CONTENTFUL_SPACE_ID)
@@ -498,10 +469,12 @@ wipe() {
     confirm "This is the master environment!  This could break your site!  I need to hear you say \"I'm super cereal\"" "I'm super cereal"
     logw "OK, your funeral..."
   fi
-    
-  local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
-  backup $bkup_file --include-drafts
 
+  # First, back up just in case...
+  local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
+  backup $bkup_file --include-drafts --download-assets
+
+  # Build an inline bash script that performs the Unpublish steps - we can then pipe to this bash script below
   local unpublish
   read -r -d '' unpublish <<EOF || true
   [[ ! -z "$VERBOSE" ]] && >&2 echo -e "${COLOR_GRAY}curl -XDELETE -H 'Authorization: Bearer *****' https://api.contentful.com/spaces/$CONTENTFUL_SPACE_ID/environments/$CONTENTFUL_ENVIRONMENT/\$0/\$1/published${COLOR_NC}";
@@ -512,12 +485,14 @@ wipe() {
   echo \$1
 EOF
 
+  # Delete the entries one by one, using process-viewer to keep track of how long it's taking
   local numEntries=$(cat $bkup_file | $JQ -r .entries[].sys.id | wc -l)  
   echo "About to delete ${numEntries} entries"
   cat $bkup_file | $JQ -r .entries[].sys.id | \
    xargs -I{} bash -c "$unpublish" "entries" "{}" | \
    pv -l -s $numEntries > /dev/null
 
+  # Delete the content types one by one
   local numContentTypes=$(cat $bkup_file | $JQ -r .contentTypes[].sys.id | wc -l)
   echo "About to delete ${numContentTypes} content types"
   cat $bkup_file | $JQ -r .contentTypes[].sys.id | \
@@ -532,7 +507,7 @@ new_env() {
   name=$(get_space_name $CONTENTFUL_SPACE_ID)
 
   [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$1"
-  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="dev"
   [[ "$CONTENTFUL_ENVIRONMENT" == "master" ]] && logerr "cannot delete the master environment" && exit -1
 
   echo -e "${COLOR_LCYAN}This will delete '$CONTENTFUL_ENVIRONMENT' and recreate it from master.${COLOR_NC}"
@@ -573,6 +548,39 @@ new_env() {
   echo "Environment ${CONTENTFUL_ENVIRONMENT} successfully created!"
 }
 
+download_schema() {
+  [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
+
+  execv node_modules/.bin/contentful space export --export-dir db --content-file contentful-schema.tmp.json \
+    --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
+    --skip-content
+
+    # Prune stuff in 'sys' that is not important for representing the schema.
+    # Also sort by ID so it's easier to compare.
+  execv $JQ '[
+        (.contentTypes[], .editorInterfaces[]) |
+        .sys = ({ id: .sys.id, type: .sys.type, contentType: .sys.contentType } | with_entries(if .value == null then empty else . end))
+      ] |
+      group_by(.sys.type) |
+      {
+        contentTypes: .[0] | sort_by(.sys.id),
+        editorInterfaces: .[1] | sort_by(.sys.contentType.sys.id) |
+          [.[] | {
+              sys: .sys,
+              controls: .controls | 
+                [.[] | {
+                    fieldId: .fieldId,
+                    settings: .settings,
+                    widgetId: .widgetId
+                  } | with_entries(if .value == null then empty else . end)
+                ] | sort_by(.fieldId)
+              }
+          ]
+      }' \
+    db/contentful-schema.tmp.json > ${1:-db/contentful-schema.json}
+  rm db/contentful-schema.tmp.json
+}
+
 update_env_var() {
   if [[ -f '.envrc' ]]; then
     execv replace_append .envrc "export $1\=" "export $1=$2"
@@ -584,7 +592,7 @@ update_env_var() {
 }
 
 env() {
-  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="$USER"
+  [[ -z "$CONTENTFUL_ENVIRONMENT" ]] && CONTENTFUL_ENVIRONMENT="dev"
 
   echo "Environments:"
   for _env in $( get_environments ); do
@@ -607,7 +615,7 @@ checkout() {
     new_env
   fi
 
-  export_schema
+  download_schema
 }
 
 # Example: bin/contentful generate add content type dog
@@ -680,6 +688,10 @@ case $subcommand in
   checkout)
     require_environment
     checkout $@
+    ;;
+  download_schema)
+    require_environment
+    download_schema $@
     ;;
   init)
     init $@
