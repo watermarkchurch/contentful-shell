@@ -200,7 +200,7 @@ require_environment() {
   if [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep cmaToken)" ]]; then
       logv "logging in to contentful CLI"
-      execv "$NPM_EXEC contentful" login
+      execv $NPM_EXEC contentful login
     fi
     CONTENTFUL_MANAGEMENT_TOKEN="$(cat ~/.contentfulrc.json | jq -r '.cmaToken')"
   fi
@@ -209,7 +209,7 @@ require_environment() {
   if [[ -z "$CONTENTFUL_SPACE_ID" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep activeSpaceId)" ]]; then
       logv "Using Contentful CLI to set space"
-      execv "$NPM_EXEC contentful" space use
+      execv $NPM_EXEC contentful space use
     fi
     CONTENTFUL_SPACE_ID="$(cat ~/.contentfulrc.json | jq -r '.activeSpaceId')"
   fi
@@ -331,7 +331,8 @@ migrate() {
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
 
-  NODE_OPTIONS="-r ts-node/register --no-warnings" execv $NPM_EXEC contentful-migration \
+  NODE_OPTIONS="-r ts-node/register --no-warnings" TS_NODE_SKIP_PROJECT="true" \
+    execv $NPM_EXEC contentful-migration \
     -s $CONTENTFUL_SPACE_ID $ENV -a $CONTENTFUL_MANAGEMENT_TOKEN \
     $YES -p $ARG || return 1
 
