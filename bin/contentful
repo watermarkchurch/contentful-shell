@@ -325,7 +325,8 @@ EOF
 # equivalent to: bin/rake db:migrate
 migrate() {
   ARG="$1"
-  [[ -z "$ARG" ]] && ARG="$(pwd)/db/migrate"
+  CWD=$(pwd)
+  [[ -z "$ARG" ]] && ARG="$CWD/db/migrate"
   [[ -d "$ARG" ]] && ARG="batch $ARG"
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
@@ -359,7 +360,7 @@ compare() {
 backup() {
   if [[ -z "$FILE" ]]; then
     FILE="$1"
-    [[ ! -z "$FILE" ]] && FILE="--content-file $FILE" && shift
+    [[ ! -z "$FILE" ]] && FILE="--content-file $(pwd)/$FILE" && shift
   fi
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id=$CONTENTFUL_ENVIRONMENT"
@@ -434,7 +435,7 @@ restore() {
 
   execv $NPM_EXEC contentful space import \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
-    --content-file $FILE \
+    --content-file $(readlink -f "$FILE") \
     $@
 }
 
@@ -556,7 +557,7 @@ new_env() {
 download_schema() {
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
 
-  execv $NPM_EXEC contentful space export --export-dir db --content-file contentful-schema.tmp.json \
+  execv $NPM_EXEC contentful space export --export-dir $(pwd)/db --content-file contentful-schema.tmp.json \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     --skip-content
 
