@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.3.0
+VERSION=0.3.1
 
 case "$(uname -s)" in
   Darwin)
@@ -184,21 +184,23 @@ parse_args $@ && shift $(($OPTIND - 1))
 [[ -z "$subcommand" ]] && parse_args $@ && shift $(($OPTIND - 1))
 
 require_environment() {
-  if [[ ! -f node_modules/.bin/contentful-migration ]]; then
-    logv "installing contentful-migration"
-    command -v npm >/dev/null 2>&1 || (logerr "I require 'npm' but it's not installed.  Please install nodejs."; exit -1)
-    execv npm install
-    [[ -f node_modules/.bin/contentful-migration ]] || (logerr "Failed installing node modules - please ensure contentful CLI is installed"; exit -1)
+  export NPM_EXEC='npm exec'
+  if command -v yarn >/dev/null 2>&1; then
+    local prefix=$(npm prefix)
+    if [[ -f "$prefix/yarn.lock" ]]; then
+    logv "yarn.lock detected - switching to use 'yarn' command"
+      # This project uses yarn
+      NPM_EXEC='yarn'
+    fi
   fi
 
   export JQ='jq'
   command -v jq >/dev/null 2>&1 || [[ -z "$LINUX" ]] || export JQ="$DIR/vendor/jq-1.5-linux64"
 
-  CONTENTFUL_CLI=`pwd`'/node_modules/.bin/contentful'
   if [[ -z "$CONTENTFUL_MANAGEMENT_TOKEN" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep cmaToken)" ]]; then
       logv "logging in to contentful CLI"
-      execv $CONTENTFUL_CLI login
+      execv "$NPM_EXEC contentful" login
     fi
     CONTENTFUL_MANAGEMENT_TOKEN="$(cat ~/.contentfulrc.json | jq -r '.cmaToken')"
   fi
@@ -207,7 +209,7 @@ require_environment() {
   if [[ -z "$CONTENTFUL_SPACE_ID" ]]; then
     if [[ ! -f ~/.contentfulrc.json || -z "$(cat ~/.contentfulrc.json | grep activeSpaceId)" ]]; then
       logv "Using Contentful CLI to set space"
-      execv $CONTENTFUL_CLI space use
+      execv "$NPM_EXEC contentful" space use
     fi
     CONTENTFUL_SPACE_ID="$(cat ~/.contentfulrc.json | jq -r '.activeSpaceId')"
   fi
@@ -303,10 +305,6 @@ init() {
   [[ -z "$LINUX" ]] && (command -v jq >/dev/null 2>&1 || brew_install jq) # we bundle jq for linux
   command -v npm >/dev/null 2>&1 || brew_install node
   [[ -f package.json ]] || npm init $YES
-  [[ -f node_modules/.bin/contentful-migration ]] || npm install --save-dev github:watermarkchurch/contentful-migration
-  [[ -f node_modules/.bin/ts-node ]] || npm install --save-dev typescript ts-node
-  [[ -f node_modules/.bin/contentful ]] || npm install --save-dev contentful-cli
-  [[ -f ~/.contentfulrc.json ]] || [[ ! -z "$YES" ]] || node_modules/.bin/contentful login
 
   mkdir -p bin && touch bin/release
   if grep 'contentful.* migrate' bin/release > /dev/null; then
@@ -327,12 +325,12 @@ EOF
 # equivalent to: bin/rake db:migrate
 migrate() {
   ARG="$1"
-  [[ -z "$ARG" ]] && ARG="db/migrate"
+  [[ -z "$ARG" ]] && ARG="$(pwd)/db/migrate"
   [[ -d "$ARG" ]] && ARG="batch $ARG"
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
 
-  execv node_modules/.bin/ts-node --skip-project node_modules/.bin/contentful-migration \
+  NODE_OPTIONS="-r ts-node/register --no-warnings" execv $NPM_EXEC contentful-migration \
     -s $CONTENTFUL_SPACE_ID $ENV -a $CONTENTFUL_MANAGEMENT_TOKEN \
     $YES -p $ARG || return 1
 
@@ -366,7 +364,7 @@ backup() {
 
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id=$CONTENTFUL_ENVIRONMENT"
 
-  execv node_modules/.bin/contentful space export $FILE \
+  execv $NPM_EXEC contentful space export $FILE \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     $@
 }
@@ -434,7 +432,7 @@ restore() {
   fi
   confirm "Import $FILE into $name?" || exit -1
 
-  execv node_modules/.bin/contentful space import \
+  execv $NPM_EXEC contentful space import \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     --content-file $FILE \
     $@
@@ -558,7 +556,7 @@ new_env() {
 download_schema() {
   [[ ! -z "$CONTENTFUL_ENVIRONMENT" ]] && ENV="--environment-id $CONTENTFUL_ENVIRONMENT"
 
-  execv node_modules/.bin/contentful space export --export-dir db --content-file contentful-schema.tmp.json \
+  execv $NPM_EXEC contentful space export --export-dir db --content-file contentful-schema.tmp.json \
     --space-id $CONTENTFUL_SPACE_ID $ENV --management-token $CONTENTFUL_MANAGEMENT_TOKEN \
     --skip-content
 
