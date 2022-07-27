@@ -37,9 +37,9 @@ logw() {
 logv() {
   [[ -z "$VERBOSE" ]] && return 0;
 
-  local msg=$@
-  [[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=$(echo "$@" | sed "s/$CONTENTFUL_MANAGEMENT_TOKEN/\*\*\*\*\*/" )
-  [[ -z $CONTENTFUL_ACCESS_TOKEN ]] || msg=$(echo "$msg" | sed "s/$CONTENTFUL_ACCESS_TOKEN/\*\*\*\*\*/" )
+  local msg="$@"
+  [[ -z $CONTENTFUL_MANAGEMENT_TOKEN ]] || msg=${msg//"$CONTENTFUL_MANAGEMENT_TOKEN"/"*****"}
+  [[ -z $CONTENTFUL_ACCESS_TOKEN ]] || msg=${msg//"$CONTENTFUL_ACCESS_TOKEN"/"*****"}
   >&2 echo -e "${COLOR_GRAY}$msg${COLOR_NC}" || true
 }
 
@@ -190,7 +190,7 @@ require_environment() {
     if [[ -f "$prefix/yarn.lock" ]]; then
     logv "yarn.lock detected - switching to use 'yarn' command"
       # This project uses yarn
-      NPM_EXEC='yarn'
+      NPM_EXEC='yarn --silent'
     fi
   fi
 
