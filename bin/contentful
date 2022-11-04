@@ -479,7 +479,7 @@ wipe() {
 
   # First, back up just in case...
   local bkup_file="contentful-export-$CONTENTFUL_SPACE_ID-${CONTENTFUL_ENVIRONMENT}-`date +"%Y-%m-%dT%H-%M-%S"`.json"
-  backup $bkup_file --include-drafts --download-assets
+  backup $bkup_file --include-drafts --download-assets --include-archived
 
   # Build an inline bash script that performs the Unpublish steps - we can then pipe to this bash script below
   local unpublish
